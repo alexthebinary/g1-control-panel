@@ -352,6 +352,65 @@ def sonic_status():
     return {"running": pid > 0, "pid": pid, "log_tail": tail}
 
 
+# --- Unitree native gesture / training-recording actions ---
+
+_arm_client = None
+
+def _get_arm_client():
+    """Lazy init. Requires ChannelFactoryInitialize on DDS_IFACE."""
+    global _arm_client
+    if _arm_client is not None:
+        return _arm_client
+    import unitree_sdk2py.core.channel as ch
+    from unitree_sdk2py.g1.arm.g1_arm_action_client import G1ArmActionClient
+    try:
+        ch.ChannelFactoryInitialize(0, DDS_IFACE)
+    except Exception:
+        pass  # already initialized elsewhere
+    c = G1ArmActionClient()
+    c.SetTimeout(10.0)
+    c.Init()
+    _arm_client = c
+    return _arm_client
+
+
+class ActionRequest(BaseModel):
+    id: int | None = None
+    name: str | None = None
+
+
+@app.get("/api/actions")
+def list_actions():
+    """Return live firmware gesture + training-recording lists."""
+    try:
+        code, result = _get_arm_client().GetActionList()
+        if code != 0 or not result:
+            return JSONResponse(status_code=500, content={"error": f"GetActionList failed (code {code})"})
+        gestures, recordings = (result[0] if len(result) > 0 else []), (result[1] if len(result) > 1 else [])
+        return {"gestures": gestures, "recordings": recordings}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.post("/api/action")
+def run_action(req: ActionRequest):
+    """Trigger an arm gesture by id OR training recording by name."""
+    import json as _json
+    client = _get_arm_client()
+    try:
+        if req.id is not None:
+            # integer id path — arm gestures
+            code, data = client._Call(7106, _json.dumps({"data": req.id}))
+            return {"kind": "gesture", "id": req.id, "code": code, "msg": data}
+        if req.name is not None:
+            # name path — training recordings
+            code, data = client._Call(7106, _json.dumps({"name": req.name}))
+            return {"kind": "recording", "name": req.name, "code": code, "msg": data}
+        return JSONResponse(status_code=400, content={"error": "need id or name"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
 @app.post("/api/sonic/start")
 def sonic_start():
     if not SONIC_LAUNCH.exists():
