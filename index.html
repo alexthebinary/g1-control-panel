@@ -188,6 +188,12 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); line
 .space-md { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
 .space-lg { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
 
+/* In-distribution marker */
+.trigger-item.ood { opacity: 0.62; border-style: dashed; }
+.trigger-item.ood:hover { opacity: 1; }
+.ood-badge { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; font-family: var(--mono); background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); letter-spacing: 0.05em; }
+.id-badge { font-size: 9px; font-weight: 700; padding: 1px 5px; border-radius: 3px; font-family: var(--mono); background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); letter-spacing: 0.05em; }
+
 @media (max-width: 500px) {
   .dpad-area { flex-direction: column; align-items: center; }
   .motion-panel { min-width: 100%; }
@@ -334,38 +340,39 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
     </div>
 
     <div class="section">
-      <div class="section-label">Motion clips</div>
+      <div class="section-label">Motion clips <span class="id-badge">TRAINED</span> track well · <span class="ood-badge">OOD</span> experimental, may flop</div>
       <div class="cat-pills" id="cat-pills">
         <button class="cat-pill active" data-cat="all">All</button>
+        <button class="cat-pill" data-cat="trained">Trained only</button>
         <button class="cat-pill" data-cat="dance">Dance</button>
         <button class="cat-pill" data-cat="expression">Expression</button>
         <button class="cat-pill" data-cat="martial">Martial</button>
         <button class="cat-pill" data-cat="athletic">Athletic</button>
       </div>
       <div class="trigger-grid" id="clip-grid">
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="space-badge space-sm">0.2m</span><span class="dur">16.6s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="space-badge space-sm">0.3m</span><span class="dur">45.8s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="space-badge space-md">1m+</span><span class="dur">138.1s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="space-badge space-md">1m+</span><span class="dur">20.3s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="space-badge space-lg">2m+</span><span class="dur">99.8s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="space-badge space-lg">2m+</span><span class="dur">131.5s</span></div>
-        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="space-badge space-lg">2m+</span><span class="dur">225.7s</span></div>
-        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="space-badge space-sm">0.3m</span><span class="dur">26.8s</span></div>
-        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="space-badge space-sm">0.3m</span><span class="dur">27.8s</span></div>
-        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="space-badge space-sm">0.1m</span><span class="dur">10.7s</span></div>
-        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="space-badge space-sm">0.3m</span><span class="dur">50.7s</span></div>
-        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="space-badge space-md">0.5m</span><span class="dur">11.0s</span></div>
-        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="space-badge space-md">1m</span><span class="dur">5.3s</span></div>
-        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="space-badge space-md">1m</span><span class="dur">6.0s</span></div>
-        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="space-badge space-sm">0.2m</span><span class="dur">5.5s</span></div>
-        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="space-badge space-lg">3m+</span><span class="dur">244.9s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="space-badge space-sm">0.2m</span><span class="dur">14.1s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="space-badge space-md">0.5m</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="space-badge space-md">0.3m</span><span class="dur">16.7s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="space-badge space-lg">2m+</span><span class="dur">4.8s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="space-badge space-lg">5m</span><span class="dur">15.2s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="space-badge space-md">1m+</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="space-badge space-lg">2m+</span><span class="dur">168.2s</span></div>
+        <div class="trigger-item" data-cat="dance" data-id="1" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="id-badge">TRAINED</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item" data-cat="dance" data-id="1" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="id-badge">TRAINED</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="ood-badge">OOD</span><span class="dur">138.1s</span></div>
+        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="ood-badge">OOD</span><span class="dur">20.3s</span></div>
+        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="ood-badge">OOD</span><span class="dur">99.8s</span></div>
+        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="ood-badge">OOD</span><span class="dur">131.5s</span></div>
+        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="ood-badge">OOD</span><span class="dur">225.7s</span></div>
+        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="ood-badge">OOD</span><span class="dur">26.8s</span></div>
+        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="ood-badge">OOD</span><span class="dur">27.8s</span></div>
+        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="ood-badge">OOD</span><span class="dur">10.7s</span></div>
+        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="ood-badge">OOD</span><span class="dur">50.7s</span></div>
+        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="ood-badge">OOD</span><span class="dur">11.0s</span></div>
+        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="ood-badge">OOD</span><span class="dur">5.3s</span></div>
+        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="ood-badge">OOD</span><span class="dur">6.0s</span></div>
+        <div class="trigger-item" data-cat="martial" data-id="1" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="id-badge">TRAINED</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="ood-badge">OOD</span><span class="dur">244.9s</span></div>
+        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="id-badge">TRAINED</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="id-badge">TRAINED</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="id-badge">TRAINED</span><span class="dur">16.7s</span></div>
+        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="ood-badge">OOD</span><span class="dur">4.8s</span></div>
+        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="id-badge">TRAINED</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="ood-badge">OOD</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="ood-badge">OOD</span><span class="dur">168.2s</span></div>
       </div>
     </div>
 
@@ -1124,7 +1131,11 @@ function filterCategory(cat) {
     p.classList.toggle('active', p.dataset.cat === cat);
   });
   document.querySelectorAll('#clip-grid .trigger-item').forEach(el => {
-    el.classList.toggle('hide', !(cat === 'all' || el.dataset.cat === cat));
+    let show;
+    if (cat === 'all') show = true;
+    else if (cat === 'trained') show = el.dataset.id === '1';
+    else show = el.dataset.cat === cat;
+    el.classList.toggle('hide', !show);
   });
 }
 document.querySelectorAll('.cat-pill').forEach(p => {
