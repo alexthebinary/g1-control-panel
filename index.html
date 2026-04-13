@@ -261,8 +261,8 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
 
   <!-- Sticky status strip -->
   <div class="status-strip">
-    <span class="dot err" id="conn-dot"></span>
-    <span class="status-pill"><span id="conn-text">Disconnected</span></span>
+    <span class="dot err" id="conn-dot" onclick="checkConnection()" style="cursor:pointer" title="Click to re-check connection"></span>
+    <span class="status-pill" onclick="checkConnection()" style="cursor:pointer" title="Click to ping"><span id="conn-text">Disconnected</span></span>
     <span class="status-pill">FSM <b id="fsm-text">—</b></span>
     <span class="status-pill">Sonic <b id="sonic-text">off</b></span>
     <span class="spacer"></span>
@@ -910,10 +910,10 @@ async function apiStop() {
 }
 
 async function apiWake() {
-  apiLog('Waking robot (this takes ~15s)...');
+  apiLog('Waking robot (Damp → StandUp → Walk, 30–50 s)...');
   document.getElementById('trigger-result').innerHTML = '<span style="color:var(--amber)">Waking... Damp → StandUp → Balance → Walk</span>';
   try {
-    const r = await fetch(API_BASE + '/api/wake', { method: 'POST', signal: AbortSignal.timeout(60000) });
+    const r = await fetch(API_BASE + '/api/wake', { method: 'POST', signal: AbortSignal.timeout(90000) });
     const data = await r.json();
     apiLog('<span style="color:var(--green)">Wake complete</span> — FSM ' + data.fsm_id + ' (' + data.status + ')');
     document.getElementById('trigger-result').innerHTML = '<span style="color:var(--green)">✓ Robot awake — FSM ' + data.fsm_id + '</span>';
