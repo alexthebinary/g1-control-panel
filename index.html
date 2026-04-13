@@ -193,6 +193,56 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); line
   .motion-panel { min-width: 100%; }
   .joystick-area { flex-direction: column; align-items: center; }
 }
+
+/* ─── Sticky status strip ─── */
+.status-strip { position: sticky; top: 0; z-index: 20; background: var(--bg); border-bottom: 1px solid var(--bg3); padding: 10px 0 12px; margin-bottom: 20px; display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
+.status-strip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text3); box-shadow: 0 0 0 2px var(--bg); transition: background 0.2s; }
+.status-strip .dot.ok { background: var(--green); }
+.status-strip .dot.warn { background: var(--amber); }
+.status-strip .dot.err { background: var(--red); }
+.status-strip .status-pill { display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-family: var(--mono); color: var(--text2); padding: 4px 10px; border-radius: 4px; background: var(--bg2); border: 1px solid var(--bg3); }
+.status-strip .status-pill b { color: var(--text); font-weight: 600; }
+.status-strip .ip-input { font-family: var(--mono); font-size: 12px; padding: 4px 10px; border-radius: 4px; border: 1px solid var(--bg3); background: var(--bg2); color: var(--text); width: 130px; }
+.status-strip .spacer { flex: 1; }
+
+/* ─── Workflow stepper ─── */
+.stepper { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 20px; padding: 14px; background: var(--bg2); border: 1px solid var(--bg3); border-radius: var(--radius); }
+.stepper .step { flex: 1; min-width: 140px; display: flex; gap: 10px; align-items: center; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--bg3); background: var(--bg); opacity: 0.55; transition: all 0.25s; }
+.stepper .step.done { opacity: 1; border-color: var(--green-border); background: var(--green-bg); }
+.stepper .step.active { opacity: 1; border-color: var(--accent2); background: rgba(200,240,49,0.06); }
+.stepper .step .n { font-family: var(--mono); font-size: 11px; font-weight: 700; width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; background: var(--bg3); color: var(--text2); flex-shrink: 0; }
+.stepper .step.done .n { background: var(--green); color: var(--bg); }
+.stepper .step.active .n { background: var(--accent); color: var(--bg); }
+.stepper .step .txt { font-size: 12px; color: var(--text2); line-height: 1.3; }
+.stepper .step.done .txt, .stepper .step.active .txt { color: var(--text); }
+.stepper .step .txt b { font-weight: 600; }
+.stepper .step .hint { font-size: 10px; color: var(--text3); display: block; margin-top: 1px; }
+
+/* ─── Category filter pills ─── */
+.cat-pills { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 12px; }
+.cat-pill { padding: 5px 12px; border-radius: 999px; border: 1px solid var(--bg3); background: var(--bg2); color: var(--text2); font-size: 12px; font-weight: 600; cursor: pointer; transition: all 0.15s; font-family: var(--sans); }
+.cat-pill:hover { border-color: var(--text3); color: var(--text); }
+.cat-pill.active { background: var(--accent); color: var(--bg); border-color: var(--accent2); }
+.cat-pill .count { font-family: var(--mono); font-size: 10px; opacity: 0.7; margin-left: 4px; }
+.trigger-item.hide { display: none; }
+
+/* ─── Collapsibles ─── */
+details.collapsible { border: 1px solid var(--bg3); border-radius: var(--radius); background: var(--bg2); margin-bottom: 16px; overflow: hidden; }
+details.collapsible > summary { cursor: pointer; padding: 10px 14px; font-size: 11px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; list-style: none; display: flex; align-items: center; gap: 8px; user-select: none; }
+details.collapsible > summary::-webkit-details-marker { display: none; }
+details.collapsible > summary::before { content: '▸'; font-size: 11px; transition: transform 0.15s; color: var(--text3); }
+details.collapsible[open] > summary::before { transform: rotate(90deg); }
+details.collapsible > summary:hover { color: var(--text); }
+details.collapsible > .details-body { padding: 0 14px 14px; }
+
+/* ─── Sticky emergency bar ─── */
+.emergency-bar { position: fixed; bottom: 0; left: 0; right: 0; z-index: 30; background: linear-gradient(to top, var(--bg) 60%, transparent); padding: 12px 20px 16px; display: flex; justify-content: center; pointer-events: none; }
+.emergency-bar button { pointer-events: auto; padding: 12px 24px; border-radius: var(--radius); border: 1px solid var(--red-border); background: var(--red-bg); color: var(--red); font-family: var(--sans); font-size: 14px; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; box-shadow: 0 4px 18px rgba(0,0,0,0.4); transition: all 0.15s; min-width: 220px; }
+.emergency-bar button:hover { background: var(--red); color: #fff; }
+.emergency-bar button kbd { font-family: var(--mono); font-size: 11px; background: rgba(0,0,0,0.25); padding: 2px 7px; border-radius: 3px; margin-right: 8px; }
+
+/* Extra bottom padding so sticky bar doesn't cover content */
+.container { padding-bottom: 90px !important; }
 </style>
 </head>
 <body>
@@ -200,39 +250,43 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); line
 
   <div class="header">
     <h1>GEAR-SONIC <span>G1</span> Control Reference</h1>
-    <p>R3-1 Controller + NVIDIA GR00T WholeBodyControl · Updated 2026-04-13</p>
+    <p>R3-1 Controller + NVIDIA GR00T WholeBodyControl</p>
   </div>
 
-  <!-- Connection bar -->
-  <div class="section">
-    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
-      <span style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Robot IP</span>
-      <input type="text" id="robot-ip" value="10.1.10.6" style="font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text);width:150px" onchange="updateApiBase()">
-      <span style="font-size:11px;color:var(--text3)">:8888</span>
-      <button onclick="checkConnection()" style="padding:6px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans)">Connect</button>
-      <span id="conn-status" class="status-badge status-err">Disconnected</span>
-      <span id="fsm-badge" style="display:none" class="status-badge status-warn">FSM ?</span>
-    </div>
+  <!-- Sticky status strip -->
+  <div class="status-strip">
+    <span class="dot err" id="conn-dot"></span>
+    <span class="status-pill"><span id="conn-text">Disconnected</span></span>
+    <span class="status-pill">FSM <b id="fsm-text">—</b></span>
+    <span class="status-pill">Sonic <b id="sonic-text">off</b></span>
+    <span class="spacer"></span>
+    <input type="text" id="robot-ip" value="10.1.10.6" class="ip-input" onchange="updateApiBase()" title="Robot IP (port 8888)">
   </div>
 
   <!-- Mode tabs -->
   <div class="mode-tabs">
-    <button class="mode-tab" onclick="switchMode('live')">Live control</button>
-    <button class="mode-tab active" onclick="switchMode('planner')">Planner locomotion</button>
+    <button class="mode-tab active" onclick="switchMode('live')">Live control</button>
+    <button class="mode-tab" onclick="switchMode('planner')">Planner locomotion</button>
     <button class="mode-tab" onclick="switchMode('dance')">Dance clip playback</button>
     <button class="mode-tab" onclick="switchMode('sdk')">SDK control</button>
   </div>
 
   <!-- ===================== LIVE CONTROL ===================== -->
-  <div class="mode-panel" id="panel-live">
+  <div class="mode-panel active" id="panel-live">
+
+    <!-- Workflow stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step" data-step="wake"><span class="n">1</span><div class="txt"><b>Wake</b><span class="hint">Damp → StandUp → Walk (FSM 501)</span></div></div>
+      <div class="step" data-step="sonic"><span class="n">2</span><div class="txt"><b>Start Sonic</b><span class="hint">Launch gamepad_manager (~15 s)</span></div></div>
+      <div class="step" data-step="r3"><span class="n">3</span><div class="txt"><b>R3 Start</b><span class="hint">Activate policy on the remote</span></div></div>
+      <div class="step" data-step="play"><span class="n">4</span><div class="txt"><b>Clip → F1</b><span class="hint">Click a clip, press F1 on R3</span></div></div>
+    </div>
 
     <div class="section">
       <div class="section-label">System</div>
       <div class="chip-row">
         <div class="chip" style="cursor:pointer" onclick="apiWake()"><span class="k" style="background:var(--green-bg);color:var(--green);border-color:var(--green-border)">Wake</span> Stand up → Walk (FSM 501)</div>
         <div class="chip" id="sonic-chip" style="cursor:pointer" onclick="apiSonicToggle()"><span class="k" id="sonic-k" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border)">Sonic</span> <span id="sonic-label">Start GEAR-SONIC (R3 + ZMQ)</span></div>
-        <div class="chip danger" style="cursor:pointer" onclick="apiStop()"><span class="k">STOP</span> Emergency damp</div>
-        <div class="chip" style="cursor:pointer" onclick="checkConnection()"><span class="k">Ping</span> Check connection</div>
       </div>
     </div>
 
@@ -280,87 +334,72 @@ body { font-family: var(--sans); background: var(--bg); color: var(--text); line
     </div>
 
     <div class="section">
-      <div class="section-label">Dance</div>
-      <div class="trigger-grid" id="dance-buttons">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="space-badge space-sm">0.2m</span><span class="dur">16.6s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="space-badge space-sm">0.3m</span><span class="dur">45.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="space-badge space-md">1m+</span><span class="dur">138.1s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="space-badge space-md">1m+</span><span class="dur">20.3s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="space-badge space-lg">2m+</span><span class="dur">99.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="space-badge space-lg">2m+</span><span class="dur">131.5s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="space-badge space-lg">2m+</span><span class="dur">225.7s</span></div>
+      <div class="section-label">Motion clips</div>
+      <div class="cat-pills" id="cat-pills">
+        <button class="cat-pill active" data-cat="all">All</button>
+        <button class="cat-pill" data-cat="dance">Dance</button>
+        <button class="cat-pill" data-cat="expression">Expression</button>
+        <button class="cat-pill" data-cat="martial">Martial</button>
+        <button class="cat-pill" data-cat="athletic">Athletic</button>
+      </div>
+      <div class="trigger-grid" id="clip-grid">
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="space-badge space-sm">0.2m</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="space-badge space-sm">0.3m</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="space-badge space-md">1m+</span><span class="dur">138.1s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="space-badge space-md">1m+</span><span class="dur">20.3s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="space-badge space-lg">2m+</span><span class="dur">99.8s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="space-badge space-lg">2m+</span><span class="dur">131.5s</span></div>
+        <div class="trigger-item" data-cat="dance" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="space-badge space-lg">2m+</span><span class="dur">225.7s</span></div>
+        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="space-badge space-sm">0.3m</span><span class="dur">26.8s</span></div>
+        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="space-badge space-sm">0.3m</span><span class="dur">27.8s</span></div>
+        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="space-badge space-sm">0.1m</span><span class="dur">10.7s</span></div>
+        <div class="trigger-item" data-cat="expression" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="space-badge space-sm">0.3m</span><span class="dur">50.7s</span></div>
+        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="space-badge space-md">0.5m</span><span class="dur">11.0s</span></div>
+        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="space-badge space-md">1m</span><span class="dur">5.3s</span></div>
+        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="space-badge space-md">1m</span><span class="dur">6.0s</span></div>
+        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="space-badge space-sm">0.2m</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item" data-cat="martial" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="space-badge space-lg">3m+</span><span class="dur">244.9s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="space-badge space-sm">0.2m</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="space-badge space-md">0.5m</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="space-badge space-md">0.3m</span><span class="dur">16.7s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="space-badge space-lg">2m+</span><span class="dur">4.8s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="space-badge space-lg">5m</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="space-badge space-md">1m+</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" data-cat="athletic" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="space-badge space-lg">2m+</span><span class="dur">168.2s</span></div>
       </div>
     </div>
 
-    <div class="section">
-      <div class="section-label">Expression</div>
-      <div class="trigger-grid">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="space-badge space-sm">0.3m</span><span class="dur">26.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="space-badge space-sm">0.3m</span><span class="dur">27.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="space-badge space-sm">0.1m</span><span class="dur">10.7s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="space-badge space-sm">0.3m</span><span class="dur">50.7s</span></div>
+    <details class="collapsible">
+      <summary>Voice &amp; Arnold soundboard</summary>
+      <div class="details-body">
+        <div style="display:flex;gap:8px;margin-bottom:12px">
+          <input type="text" id="speak-input" placeholder="Type something for G1 to say..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiSpeak(this.value)">
+          <button onclick="apiSpeak(document.getElementById('speak-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--purple);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">Speak</button>
+        </div>
+        <div id="speak-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:18px;margin-bottom:14px"></div>
+        <div class="trigger-grid">
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('illbeback')"><span class="kw">I'll be back</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('hastalavista')"><span class="kw">Hasta la vista</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('terminated')"><span class="kw">Terminated</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('getdown')"><span class="kw">Get down!</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('comewitme')"><span class="kw">Come with me</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('gettothecopter')"><span class="kw">Get to the chopper!</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('its_not_a_tumor')"><span class="kw">Not a tumor!</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('consider_that_a_divorce')"><span class="kw">Consider that a divorce</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('chill_out')"><span class="kw">Chill out</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('talk_to_the_hand')"><span class="kw">Talk to the hand</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('whoisyourdaddy')"><span class="kw">Who is your daddy</span></div>
+          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('nowyouknow')"><span class="kw">Why I cry</span></div>
+        </div>
       </div>
-    </div>
+    </details>
 
-    <div class="section">
-      <div class="section-label">Martial arts</div>
-      <div class="trigger-grid">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="space-badge space-md">0.5m</span><span class="dur">11.0s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="space-badge space-md">1m</span><span class="dur">5.3s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="space-badge space-md">1m</span><span class="dur">6.0s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="space-badge space-sm">0.2m</span><span class="dur">5.5s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="space-badge space-lg">3m+</span><span class="dur">244.9s</span></div>
+    <details class="collapsible">
+      <summary>API log</summary>
+      <div class="details-body">
+        <div id="api-log" class="qr-box" style="max-height:200px;overflow-y:auto;font-size:11px;color:var(--text3)">Waiting for connection...</div>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Athletic</div>
-      <div class="trigger-grid">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="space-badge space-sm">0.2m</span><span class="dur">14.1s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="space-badge space-md">0.5m</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="space-badge space-md">0.3m</span><span class="dur">16.7s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="space-badge space-lg">2m+</span><span class="dur">4.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="space-badge space-lg">5m</span><span class="dur">15.2s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="space-badge space-md">1m+</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="space-badge space-lg">2m+</span><span class="dur">168.2s</span></div>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <div class="section">
-      <div class="section-label">Voice — text to speech</div>
-      <div style="display:flex;gap:8px;margin-bottom:12px">
-        <input type="text" id="speak-input" placeholder="Type something for G1 to say..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiSpeak(this.value)">
-        <button onclick="apiSpeak(document.getElementById('speak-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--purple);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">Speak</button>
-      </div>
-      <div id="speak-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:18px"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Arnold / Terminator soundboard</div>
-      <div class="trigger-grid">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('illbeback')"><span class="kw">I'll be back</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('hastalavista')"><span class="kw">Hasta la vista</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('terminated')"><span class="kw">Terminated</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('getdown')"><span class="kw">Get down!</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('comewitme')"><span class="kw">Come with me</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('gettothecopter')"><span class="kw">Get to the chopper!</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('its_not_a_tumor')"><span class="kw">Not a tumor!</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('consider_that_a_divorce')"><span class="kw">Consider that a divorce</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('chill_out')"><span class="kw">Chill out</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('talk_to_the_hand')"><span class="kw">Talk to the hand</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('whoisyourdaddy')"><span class="kw">Who is your daddy</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('nowyouknow')"><span class="kw">Why I cry</span></div>
-      </div>
-    </div>
-
-    <hr class="divider">
-
-    <div class="section">
-      <div class="section-label">API log</div>
-      <div id="api-log" class="qr-box" style="max-height:200px;overflow-y:auto;font-size:11px;color:var(--text3)">Waiting for connection...</div>
-    </div>
+    </details>
   </div>
 
   <!-- ===================== PLANNER MODE ===================== -->
@@ -639,6 +678,11 @@ Cold: ~22s   Warm: <span class="hl">9-11s</span>   Model: gemma4:e2b-it-q4_K_M</
 
 </div>
 
+<!-- Sticky emergency STOP -->
+<div class="emergency-bar">
+  <button onclick="apiStop()" title="Emergency damp — keyboard: Esc or Space"><kbd>STOP</kbd>Emergency damp</button>
+</div>
+
 <script>
 const motionSets = {
   up: {
@@ -771,27 +815,55 @@ function apiLog(msg) {
   if (lines.length > 50) el.innerHTML = lines.slice(0, 50).join('\n');
 }
 
+// Shared state used by the status strip + stepper.
+const robotState = { connected: false, fsm_id: null, fsm_name: '—', sonic_running: false };
+
+function updateStatusUI() {
+  const dot = document.getElementById('conn-dot');
+  const connTxt = document.getElementById('conn-text');
+  const fsmTxt = document.getElementById('fsm-text');
+  const sonicTxt = document.getElementById('sonic-text');
+  dot.className = 'dot ' + (robotState.connected ? (robotState.fsm_id === 501 || robotState.fsm_id === 65535 ? 'ok' : 'warn') : 'err');
+  connTxt.textContent = robotState.connected ? (API_BASE.replace(/^https?:\/\//, '')) : 'Disconnected';
+  fsmTxt.textContent = robotState.connected ? (robotState.fsm_name + ' (' + robotState.fsm_id + ')') : '—';
+  sonicTxt.textContent = robotState.sonic_running ? 'running' : 'off';
+  // Update stepper
+  const steps = {
+    wake:  robotState.fsm_id === 501 || robotState.fsm_id === 65535,
+    sonic: robotState.sonic_running,
+    r3:    robotState.fsm_id === 65535,  // Sonic taking over shows as FSM 65535
+    play:  false,  // advisory only — we can't sense R3 F1 from here
+  };
+  let firstPending = null;
+  document.querySelectorAll('.stepper .step').forEach(el => {
+    const key = el.dataset.step;
+    el.classList.remove('done', 'active');
+    if (steps[key]) el.classList.add('done');
+    else if (!firstPending) { el.classList.add('active'); firstPending = key; }
+  });
+}
+
 async function checkConnection() {
-  const badge = document.getElementById('conn-status');
-  const fsmBadge = document.getElementById('fsm-badge');
   try {
-    badge.className = 'status-badge status-warn';
-    badge.textContent = 'Connecting...';
     const r = await fetch(API_BASE + '/api/status', { signal: AbortSignal.timeout(3000) });
     const data = await r.json();
-    badge.className = 'status-badge status-ok';
-    badge.textContent = 'Connected';
-    fsmBadge.style.display = 'inline-flex';
-    fsmBadge.textContent = 'FSM ' + data.fsm_id + ' (' + data.fsm_name + ')';
-    fsmBadge.className = 'status-badge ' + (data.ready ? 'status-ok' : 'status-warn');
-    apiLog('<span style="color:var(--green)">Connected</span> — FSM ' + data.fsm_id + ' (' + data.fsm_name + '), uptime ' + data.uptime_s + 's');
+    const wasConnected = robotState.connected;
+    robotState.connected = true;
+    robotState.fsm_id = data.fsm_id;
+    robotState.fsm_name = data.fsm_name;
+    updateStatusUI();
+    if (!wasConnected) apiLog('<span style="color:var(--green)">Connected</span> — FSM ' + data.fsm_id + ' (' + data.fsm_name + '), uptime ' + data.uptime_s + 's');
   } catch (e) {
-    badge.className = 'status-badge status-err';
-    badge.textContent = 'Disconnected';
-    fsmBadge.style.display = 'none';
-    apiLog('<span style="color:var(--red)">Connection failed</span> — is g1_trigger_server.py running on ' + API_BASE + '?');
+    const wasConnected = robotState.connected;
+    robotState.connected = false;
+    robotState.fsm_id = null;
+    robotState.fsm_name = '—';
+    updateStatusUI();
+    if (wasConnected) apiLog('<span style="color:var(--red)">Connection lost</span> — ' + API_BASE);
   }
 }
+setInterval(checkConnection, 4000);
+window.addEventListener('load', () => setTimeout(checkConnection, 300));
 
 async function apiTrigger(text) {
   if (!text) return;
@@ -858,6 +930,8 @@ async function apiSonicStatus() {
       label.textContent = 'Start GEAR-SONIC (R3 + ZMQ)';
       chip.classList.remove('danger');
     }
+    robotState.sonic_running = d.running;
+    updateStatusUI();
     return d.running;
   } catch (e) { return null; }
 }
@@ -1043,6 +1117,31 @@ setInterval(function() {
 
 showSet('up');
 renderClips();
+
+// === Category filter pills ===
+function filterCategory(cat) {
+  document.querySelectorAll('.cat-pill').forEach(p => {
+    p.classList.toggle('active', p.dataset.cat === cat);
+  });
+  document.querySelectorAll('#clip-grid .trigger-item').forEach(el => {
+    el.classList.toggle('hide', !(cat === 'all' || el.dataset.cat === cat));
+  });
+}
+document.querySelectorAll('.cat-pill').forEach(p => {
+  p.addEventListener('click', () => filterCategory(p.dataset.cat));
+});
+
+// === Keyboard shortcuts: Esc or Space fires emergency stop ===
+document.addEventListener('keydown', (e) => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'Escape' || e.code === 'Space') {
+    e.preventDefault();
+    apiStop();
+  }
+});
+
+// Initial status pull
+updateStatusUI();
 </script>
 </body>
 </html>
