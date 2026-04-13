@@ -142,11 +142,9 @@ def stream_clip(sock, jp, jv, bq, *, chunk=CHUNK_FRAMES, verbose=True):
         sent = end
         next_send += period
 
-    # Wait for last chunk to finish playing before stopping.
-    time.sleep(chunk * DT + 0.25)
-
-    # Leave motion mode running — caller decides when to stop. For standalone
-    # invocation main() sends the stop.
+    # Wait for last chunk to finish playing before stopping. Hold the socket
+    # open for an extra 2s so a late F1 press on R3 still catches the stream.
+    time.sleep(chunk * DT + 2.0)
 
 
 def main():
