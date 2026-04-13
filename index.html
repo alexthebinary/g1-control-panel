@@ -1,0 +1,1048 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GEAR-SONIC G1 Control Reference</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #0c0c0f;
+  --bg2: #141418;
+  --bg3: #1c1c22;
+  --bg4: #26262e;
+  --text: #e8e6e1;
+  --text2: #9b9891;
+  --text3: #6b6862;
+  --accent: #c8f031;
+  --accent2: #a3c828;
+  --red: #ff4d4d;
+  --red-bg: rgba(255,77,77,0.08);
+  --red-border: rgba(255,77,77,0.25);
+  --amber: #f0a030;
+  --amber-bg: rgba(240,160,48,0.08);
+  --amber-border: rgba(240,160,48,0.25);
+  --green: #3ddc84;
+  --green-bg: rgba(61,220,132,0.08);
+  --green-border: rgba(61,220,132,0.25);
+  --blue: #4da6ff;
+  --blue-bg: rgba(77,166,255,0.08);
+  --blue-border: rgba(77,166,255,0.25);
+  --purple: #b48eff;
+  --purple-bg: rgba(180,142,255,0.08);
+  --purple-border: rgba(180,142,255,0.25);
+  --mono: 'JetBrains Mono', monospace;
+  --sans: 'DM Sans', system-ui, sans-serif;
+  --radius: 10px;
+  --radius-sm: 6px;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--sans); background: var(--bg); color: var(--text); line-height: 1.5; -webkit-font-smoothing: antialiased; }
+
+.container { max-width: 760px; margin: 0 auto; padding: 24px 20px 60px; }
+
+/* Header */
+.header { margin-bottom: 32px; padding-bottom: 24px; border-bottom: 1px solid var(--bg3); }
+.header h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 4px; }
+.header h1 span { color: var(--accent); }
+.header p { font-size: 13px; color: var(--text3); font-family: var(--mono); }
+
+/* Mode Tabs */
+.mode-tabs { display: flex; gap: 4px; background: var(--bg2); border-radius: var(--radius); padding: 4px; margin-bottom: 28px; border: 1px solid var(--bg3); }
+.mode-tab { flex: 1; padding: 10px 16px; border-radius: 7px; border: none; background: transparent; color: var(--text2); font-family: var(--sans); font-size: 13px; font-weight: 600; cursor: pointer; transition: all 0.2s; text-align: center; }
+.mode-tab:hover { color: var(--text); background: var(--bg3); }
+.mode-tab.active { background: var(--accent); color: var(--bg); }
+
+.mode-panel { display: none; }
+.mode-panel.active { display: block; }
+
+/* Section */
+.section { margin-bottom: 24px; }
+.section-label { font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; margin-bottom: 10px; }
+
+/* System chips */
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.chip { display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: var(--radius-sm); border: 1px solid var(--bg3); background: var(--bg2); font-size: 13px; color: var(--text2); }
+.chip .k { font-family: var(--mono); font-size: 11px; font-weight: 600; background: var(--bg); border: 1px solid var(--bg4); border-radius: 4px; padding: 2px 8px; color: var(--text); min-width: 22px; text-align: center; }
+.chip.danger { border-color: var(--red-border); background: var(--red-bg); }
+.chip.danger .k { border-color: var(--red-border); color: var(--red); }
+.chip.danger { color: var(--red); }
+
+/* Stick cards */
+.stick-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+.stick-card { padding: 10px 14px; border-radius: var(--radius-sm); background: var(--bg2); border: 1px solid var(--bg3); }
+.stick-card .label { font-size: 11px; color: var(--text3); font-weight: 500; margin-bottom: 2px; }
+.stick-card .val { font-size: 13px; font-weight: 500; }
+
+/* D-Pad + Panel */
+.dpad-area { display: flex; gap: 28px; align-items: flex-start; flex-wrap: wrap; }
+.dpad-box { flex-shrink: 0; position: relative; width: 148px; height: 148px; }
+.dpad-center { position: absolute; left: 52px; top: 52px; width: 44px; height: 44px; border-radius: 50%; background: var(--bg3); border: 1px solid var(--bg4); }
+.dpad-btn { position: absolute; width: 44px; height: 44px; border-radius: var(--radius-sm); border: 1px solid var(--bg4); background: var(--bg2); color: var(--text3); font-size: 10px; font-weight: 600; font-family: var(--mono); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+.dpad-btn:hover { border-color: var(--text3); color: var(--text2); background: var(--bg3); }
+.dpad-btn.active { background: var(--accent); color: var(--bg); border-color: var(--accent2); }
+.dpad-up { left: 52px; top: 0; }
+.dpad-down { left: 52px; bottom: 0; }
+.dpad-left { left: 0; top: 52px; }
+.dpad-right { right: 0; top: 52px; }
+
+.motion-panel { flex: 1; min-width: 260px; }
+.mp-title { font-size: 15px; font-weight: 600; margin-bottom: 2px; }
+.mp-sub { font-size: 12px; color: var(--text3); margin-bottom: 12px; }
+
+/* Motion items */
+.m-item { display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: var(--radius-sm); font-size: 13px; transition: background 0.1s; }
+.m-item:hover { background: var(--bg2); }
+.m-id { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 22px; text-align: right; }
+.m-name { flex: 1; font-weight: 500; }
+.m-meta { font-size: 11px; color: var(--text3); }
+.risk { font-size: 9px; font-weight: 600; padding: 2px 7px; border-radius: 4px; text-transform: uppercase; letter-spacing: 0.04em; }
+.r-low { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.r-med { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.r-high { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+/* Boxing grid */
+.box-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 6px; }
+.box-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--bg3); background: var(--bg2); font-size: 13px; }
+.box-item .k { font-family: var(--mono); font-size: 10px; font-weight: 600; background: var(--bg); border: 1px solid var(--bg4); border-radius: 4px; padding: 2px 7px; color: var(--text); }
+
+/* Dance clips */
+.clip-list { display: flex; flex-direction: column; gap: 4px; }
+.clip-item { display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: var(--radius-sm); font-size: 13px; transition: background 0.1s; }
+.clip-item:hover { background: var(--bg2); }
+.clip-num { font-family: var(--mono); font-size: 11px; color: var(--text3); min-width: 22px; text-align: right; }
+.clip-name { flex: 1; font-weight: 500; }
+.clip-type { font-size: 11px; color: var(--text3); padding: 2px 8px; border-radius: 4px; background: var(--bg3); }
+.clip-frames { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.clip-mirror { font-size: 9px; font-weight: 600; padding: 2px 6px; border-radius: 4px; background: var(--purple-bg); color: var(--purple); border: 1px solid var(--purple-border); }
+
+/* Dance direct select */
+.dance-direct { display: grid; grid-template-columns: repeat(auto-fill, minmax(155px, 1fr)); gap: 6px; }
+.dd-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--bg3); background: var(--bg2); font-size: 13px; }
+.dd-item .k { font-family: var(--mono); font-size: 10px; font-weight: 600; background: var(--bg); border: 1px solid var(--bg4); border-radius: 4px; padding: 2px 7px; color: var(--accent); }
+.dd-note { font-size: 12px; color: var(--text3); margin-top: 6px; }
+
+/* Quick ref box */
+.qr-box { font-family: var(--mono); font-size: 12px; padding: 14px 18px; border-radius: var(--radius); background: var(--bg2); border: 1px solid var(--bg3); color: var(--text2); line-height: 1.7; white-space: pre-wrap; }
+.qr-box .hl { color: var(--accent); font-weight: 600; }
+.qr-box .warn { color: var(--red); }
+
+/* Safety */
+.safety-list { display: flex; flex-direction: column; gap: 6px; }
+.safety-item { font-size: 13px; color: var(--text2); padding: 8px 12px; border-radius: var(--radius-sm); background: var(--bg2); border: 1px solid var(--bg3); line-height: 1.5; }
+.safety-item strong { color: var(--text); font-weight: 600; }
+.safety-item.crit { border-color: var(--red-border); background: var(--red-bg); }
+.safety-item.crit strong { color: var(--red); }
+
+/* Launch */
+.launch-box { font-family: var(--mono); font-size: 12px; padding: 14px 18px; border-radius: var(--radius); background: var(--bg2); border: 1px solid var(--bg3); color: var(--text2); line-height: 1.8; }
+.launch-box .cmd { color: var(--accent); }
+.launch-box .cmt { color: var(--text3); }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--bg3); margin: 28px 0; }
+
+/* SDK function table */
+.fn-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.fn-table th { text-align: left; font-size: 10px; font-weight: 600; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; padding: 6px 10px; border-bottom: 1px solid var(--bg3); }
+.fn-table td { padding: 7px 10px; border-bottom: 1px solid var(--bg3); vertical-align: top; }
+.fn-table tr:hover { background: var(--bg2); }
+.fn-table .fn-name { font-family: var(--mono); font-size: 12px; color: var(--accent); font-weight: 500; white-space: nowrap; }
+.fn-table .fn-file { font-family: var(--mono); font-size: 11px; color: var(--text3); }
+.fn-table .fn-desc { color: var(--text2); }
+
+/* Trigger items */
+.trigger-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 6px; }
+.trigger-item { display: flex; align-items: center; gap: 8px; padding: 8px 10px; border-radius: var(--radius-sm); border: 1px solid var(--bg3); background: var(--bg2); font-size: 13px; }
+.trigger-item .kw { font-family: var(--mono); font-size: 11px; color: var(--accent); font-weight: 500; }
+.trigger-item .arrow { color: var(--text3); font-size: 11px; }
+.trigger-item .clip { font-weight: 500; }
+.trigger-item .dur { font-family: var(--mono); font-size: 11px; color: var(--text3); margin-left: auto; }
+
+/* Status badge */
+.status-badge { display: inline-flex; align-items: center; gap: 5px; font-size: 11px; font-weight: 600; padding: 3px 9px; border-radius: 4px; }
+.status-ok { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.status-warn { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.status-err { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+/* Data source cards */
+.datasrc-list { display: flex; flex-direction: column; gap: 6px; }
+.datasrc-item { padding: 10px 14px; border-radius: var(--radius-sm); background: var(--bg2); border: 1px solid var(--bg3); }
+.datasrc-item .ds-title { font-weight: 600; font-size: 14px; margin-bottom: 2px; }
+.datasrc-item .ds-meta { font-size: 12px; color: var(--text3); font-family: var(--mono); }
+.datasrc-item .ds-desc { font-size: 13px; color: var(--text2); margin-top: 4px; }
+
+/* Joystick */
+.joystick-area { display: flex; gap: 24px; align-items: flex-start; flex-wrap: wrap; }
+.joystick-container { position: relative; width: 180px; height: 180px; flex-shrink: 0; }
+.joystick-bg { width: 180px; height: 180px; border-radius: 50%; background: var(--bg2); border: 2px solid var(--bg4); position: absolute; }
+.joystick-thumb { width: 50px; height: 50px; border-radius: 50%; background: var(--accent); border: 2px solid var(--accent2); position: absolute; left: 65px; top: 65px; cursor: grab; touch-action: none; transition: none; box-shadow: 0 0 12px rgba(200,240,49,0.3); }
+.joystick-thumb:active { cursor: grabbing; }
+.joystick-label { text-align: center; margin-top: 6px; font-size: 11px; color: var(--text3); font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; }
+.joystick-readout { font-family: var(--mono); font-size: 12px; color: var(--text2); padding: 8px 12px; border-radius: var(--radius-sm); background: var(--bg2); border: 1px solid var(--bg3); min-width: 180px; }
+.joystick-readout .val { color: var(--accent); font-weight: 600; }
+
+/* Space requirement badges */
+.space-badge { font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 4px; font-family: var(--mono); }
+.space-sm { background: var(--green-bg); color: var(--green); border: 1px solid var(--green-border); }
+.space-md { background: var(--amber-bg); color: var(--amber); border: 1px solid var(--amber-border); }
+.space-lg { background: var(--red-bg); color: var(--red); border: 1px solid var(--red-border); }
+
+@media (max-width: 500px) {
+  .dpad-area { flex-direction: column; align-items: center; }
+  .motion-panel { min-width: 100%; }
+  .joystick-area { flex-direction: column; align-items: center; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>GEAR-SONIC <span>G1</span> Control Reference</h1>
+    <p>R3-1 Controller + NVIDIA GR00T WholeBodyControl · Updated 2026-04-13</p>
+  </div>
+
+  <!-- Connection bar -->
+  <div class="section">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:11px;color:var(--text3);font-weight:600;text-transform:uppercase;letter-spacing:0.08em">Robot IP</span>
+      <input type="text" id="robot-ip" value="10.1.10.6" style="font-family:var(--mono);font-size:13px;padding:6px 12px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text);width:150px" onchange="updateApiBase()">
+      <span style="font-size:11px;color:var(--text3)">:8888</span>
+      <button onclick="checkConnection()" style="padding:6px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text2);font-size:12px;font-weight:600;cursor:pointer;font-family:var(--sans)">Connect</button>
+      <span id="conn-status" class="status-badge status-err">Disconnected</span>
+      <span id="fsm-badge" style="display:none" class="status-badge status-warn">FSM ?</span>
+    </div>
+  </div>
+
+  <!-- Mode tabs -->
+  <div class="mode-tabs">
+    <button class="mode-tab" onclick="switchMode('live')">Live control</button>
+    <button class="mode-tab active" onclick="switchMode('planner')">Planner locomotion</button>
+    <button class="mode-tab" onclick="switchMode('dance')">Dance clip playback</button>
+    <button class="mode-tab" onclick="switchMode('sdk')">SDK control</button>
+  </div>
+
+  <!-- ===================== LIVE CONTROL ===================== -->
+  <div class="mode-panel" id="panel-live">
+
+    <div class="section">
+      <div class="section-label">System</div>
+      <div class="chip-row">
+        <div class="chip" style="cursor:pointer" onclick="apiWake()"><span class="k" style="background:var(--green-bg);color:var(--green);border-color:var(--green-border)">Wake</span> Stand up → Walk (FSM 501)</div>
+        <div class="chip" id="sonic-chip" style="cursor:pointer" onclick="apiSonicToggle()"><span class="k" id="sonic-k" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border)">Sonic</span> <span id="sonic-label">Start GEAR-SONIC (R3 + ZMQ)</span></div>
+        <div class="chip danger" style="cursor:pointer" onclick="apiStop()"><span class="k">STOP</span> Emergency damp</div>
+        <div class="chip" style="cursor:pointer" onclick="checkConnection()"><span class="k">Ping</span> Check connection</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Walk / Run — virtual joystick</div>
+      <div class="joystick-area">
+        <div>
+          <div class="joystick-container" id="joy-move">
+            <div class="joystick-bg"></div>
+            <div class="joystick-thumb" id="joy-move-thumb"></div>
+          </div>
+          <div class="joystick-label">Move (L-stick)</div>
+        </div>
+        <div>
+          <div class="joystick-container" id="joy-turn">
+            <div class="joystick-bg"></div>
+            <div class="joystick-thumb" id="joy-turn-thumb"></div>
+          </div>
+          <div class="joystick-label">Turn (R-stick)</div>
+        </div>
+        <div style="flex:1;min-width:180px">
+          <div class="joystick-readout" id="joy-readout">
+            vx: <span class="val" id="joy-vx">0.00</span> m/s<br>
+            vy: <span class="val" id="joy-vy">0.00</span> m/s<br>
+            ωz: <span class="val" id="joy-wz">0.00</span> rad/s<br>
+            <span id="joy-mode" style="color:var(--text3)">Idle</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="setMoveSpeed(0.8)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Walk</span> 0.8</button>
+            <button onclick="setMoveSpeed(2.0)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Run</span> 2.0</button>
+            <button onclick="setMoveSpeed(0.3)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Slow</span> 0.3</button>
+            <button onclick="joyStop()" class="chip danger" style="cursor:pointer;font-size:11px"><span class="k">Stop</span></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Quick trigger</div>
+      <div style="display:flex;gap:8px;margin-bottom:16px">
+        <input type="text" id="trigger-input" placeholder="Type: hip hop, charleston, cartwheel..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiTrigger(this.value)">
+        <button onclick="apiTrigger(document.getElementById('trigger-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:var(--bg);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">GO</button>
+      </div>
+      <div id="trigger-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:20px"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Dance</div>
+      <div class="trigger-grid" id="dance-buttons">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="space-badge space-sm">0.2m</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="space-badge space-sm">0.3m</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="space-badge space-md">1m+</span><span class="dur">138.1s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="space-badge space-md">1m+</span><span class="dur">20.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="space-badge space-lg">2m+</span><span class="dur">99.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="space-badge space-lg">2m+</span><span class="dur">131.5s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="space-badge space-lg">2m+</span><span class="dur">225.7s</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Expression</div>
+      <div class="trigger-grid">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="space-badge space-sm">0.3m</span><span class="dur">26.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="space-badge space-sm">0.3m</span><span class="dur">27.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="space-badge space-sm">0.1m</span><span class="dur">10.7s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="space-badge space-sm">0.3m</span><span class="dur">50.7s</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Martial arts</div>
+      <div class="trigger-grid">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="space-badge space-md">0.5m</span><span class="dur">11.0s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="space-badge space-md">1m</span><span class="dur">5.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="space-badge space-md">1m</span><span class="dur">6.0s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="space-badge space-sm">0.2m</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="space-badge space-lg">3m+</span><span class="dur">244.9s</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Athletic</div>
+      <div class="trigger-grid">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="space-badge space-sm">0.2m</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="space-badge space-md">0.5m</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="space-badge space-md">0.3m</span><span class="dur">16.7s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="space-badge space-lg">2m+</span><span class="dur">4.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="space-badge space-lg">5m</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="space-badge space-md">1m+</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="space-badge space-lg">2m+</span><span class="dur">168.2s</span></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-label">Voice — text to speech</div>
+      <div style="display:flex;gap:8px;margin-bottom:12px">
+        <input type="text" id="speak-input" placeholder="Type something for G1 to say..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiSpeak(this.value)">
+        <button onclick="apiSpeak(document.getElementById('speak-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--purple);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">Speak</button>
+      </div>
+      <div id="speak-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:18px"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Arnold / Terminator soundboard</div>
+      <div class="trigger-grid">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('illbeback')"><span class="kw">I'll be back</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('hastalavista')"><span class="kw">Hasta la vista</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('terminated')"><span class="kw">Terminated</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('getdown')"><span class="kw">Get down!</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('comewitme')"><span class="kw">Come with me</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('gettothecopter')"><span class="kw">Get to the chopper!</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('its_not_a_tumor')"><span class="kw">Not a tumor!</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('consider_that_a_divorce')"><span class="kw">Consider that a divorce</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('chill_out')"><span class="kw">Chill out</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('talk_to_the_hand')"><span class="kw">Talk to the hand</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('whoisyourdaddy')"><span class="kw">Who is your daddy</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('nowyouknow')"><span class="kw">Why I cry</span></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-label">API log</div>
+      <div id="api-log" class="qr-box" style="max-height:200px;overflow-y:auto;font-size:11px;color:var(--text3)">Waiting for connection...</div>
+    </div>
+  </div>
+
+  <!-- ===================== PLANNER MODE ===================== -->
+  <div class="mode-panel active" id="panel-planner">
+
+    <div class="section">
+      <div class="section-label">System</div>
+      <div class="chip-row">
+        <div class="chip"><span class="k">Start</span> Stand up + enable planner</div>
+        <div class="chip danger"><span class="k">Select</span> Emergency stop (damp)</div>
+        <div class="chip danger"><span class="k">A</span> Emergency stop (halt)</div>
+        <div class="chip"><span class="k">F1</span> Toggle ZMQ streaming</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Movement</div>
+      <div class="stick-grid">
+        <div class="stick-card"><div class="label">Left stick</div><div class="val">Move (8 directions)</div></div>
+        <div class="stick-card"><div class="label">Right stick</div><div class="val">Turn (continuous)</div></div>
+        <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Snap turn ±45°</div></div>
+        <div class="stick-card"><div class="label">X / Y</div><div class="val">Next / prev mode</div></div>
+        <div class="stick-card"><div class="label">B</div><div class="val">Reset to default</div></div>
+        <div class="stick-card"><div class="label">L2 / R2</div><div class="val">Height (squat only)</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Motion sets — tap a direction</div>
+      <div class="dpad-area">
+        <div class="dpad-box">
+          <div class="dpad-center"></div>
+          <button class="dpad-btn dpad-up active" onclick="showSet('up')">UP</button>
+          <button class="dpad-btn dpad-down" onclick="showSet('down')">DN</button>
+          <button class="dpad-btn dpad-left" onclick="showSet('left')">LT</button>
+          <button class="dpad-btn dpad-right" onclick="showSet('right')">RT</button>
+        </div>
+        <div class="motion-panel" id="set-panel"></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-label">Quick reference</div>
+      <div class="qr-box"><span class="hl">Start</span> = GO          <span class="warn">Select</span> = STOP
+<span class="warn">A</span>     = STOP
+
+D-Up   = Standing    D-Down  = Squat
+D-Left = Boxing      D-Right = Styled
+
+<span class="hl">X</span> = Next mode     <span class="hl">Y</span> = Prev mode
+<span class="hl">B</span> = Reset to default
+(Boxing: direct buttons, not cycling)
+
+Left stick  = Move (8 dir)
+Right stick = Turn (continuous)
+L1/R1 = Snap turn ±45°
+L2/R2 = Height (squat set only)</div>
+    </div>
+  </div>
+
+  <!-- ===================== DANCE MODE ===================== -->
+  <div class="mode-panel" id="panel-dance">
+
+    <div class="section">
+      <div class="section-label">System</div>
+      <div class="chip-row">
+        <div class="chip"><span class="k">Start</span> Stand up</div>
+        <div class="chip danger"><span class="k">Select</span> Emergency stop</div>
+        <div class="chip"><span class="k">F1</span> Toggle planner on/off</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Playback controls (planner off)</div>
+      <div class="stick-grid">
+        <div class="stick-card"><div class="label">A</div><div class="val">Play / pause clip</div></div>
+        <div class="stick-card"><div class="label">B</div><div class="val">Restart from frame 0</div></div>
+        <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Prev / next clip</div></div>
+        <div class="stick-card"><div class="label">X / Y</div><div class="val">Recalibrate heading</div></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Direct motion select (press again = mirrored)</div>
+      <div class="dance-direct">
+        <div class="dd-item"><span class="k">D-Up</span> Macarena</div>
+        <div class="dd-item"><span class="k">D-Dn</span> Squat</div>
+        <div class="dd-item"><span class="k">D-Lt</span> Party dance</div>
+        <div class="dd-item"><span class="k">D-Rt</span> Walk spin 360</div>
+        <div class="dd-item"><span class="k">L2</span> Neutral kick</div>
+        <div class="dd-item"><span class="k">R2</span> One-leg jump</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">All 13 motion clips</div>
+      <div class="clip-list" id="clip-list"></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Planner sub-mode (F1 toggles on)</div>
+      <div class="stick-grid">
+        <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Cycle mode (0–6)</div></div>
+        <div class="stick-card"><div class="label">L2 / R2</div><div class="val">Speed / height</div></div>
+        <div class="stick-card"><div class="label">A</div><div class="val">Play / pause</div></div>
+        <div class="stick-card"><div class="label">B</div><div class="val">Emergency stop</div></div>
+        <div class="stick-card"><div class="label">Left stick</div><div class="val">Move direction</div></div>
+        <div class="stick-card"><div class="label">Right stick</div><div class="val">Facing direction</div></div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-label">Quick reference</div>
+      <div class="qr-box"><span class="hl">Start</span> = GO          <span class="warn">Select</span> = STOP
+
+D-Up   = Macarena     D-Down  = Squat
+D-Left = Party Dance  D-Right = Spin
+L2     = Kick         R2      = Jump
+(press same button again = mirrored)
+
+<span class="hl">A</span>  = Play / Pause    <span class="hl">B</span>  = Restart
+<span class="hl">L1</span> = Prev clip       <span class="hl">R1</span> = Next clip
+X/Y = Recalibrate heading
+<span class="hl">F1</span> = Toggle planner on/off</div>
+    </div>
+  </div>
+
+  <!-- ===================== SDK CONTROL ===================== -->
+  <div class="mode-panel" id="panel-sdk">
+
+    <div class="section">
+      <div class="section-label">Wake sequence (cold boot → Walk)</div>
+      <div class="launch-box"><span class="cmd">python3 ~/g1_tools/g1_wake.py</span>           <span class="cmt"># Full wake to Walk (FSM 501)</span>
+<span class="cmd">python3 ~/g1_tools/g1_wake.py --to standup</span> <span class="cmt"># Stop at StandUp (FSM 4)</span>
+<span class="cmd">python3 ~/g1_tools/g1_wake.py --verify</span>     <span class="cmt"># Wake + tiny Move() to confirm</span>
+
+<span class="cmt"># Sequence: Damp(1) → StandUp(4) → BalanceMode(0) → Walk(501)</span>
+<span class="cmt"># BalanceMode(0) MUST be set before Walk or robot is unsupported</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Skill library — g1_skills.py</div>
+      <table class="fn-table">
+        <tr><th>Function</th><th>Description</th><th>Notes</th></tr>
+        <tr><td class="fn-name">describe_scene_structured()</td><td class="fn-desc">Capture D435i frame → Gemma 4 native tool call → structured JSON</td><td class="fn-file">9-11s warm</td></tr>
+        <tr><td class="fn-name">verify_motors_engaged()</td><td class="fn-desc">Tiny Move() + IMU yaw delta — phantom-walk diagnostic</td><td class="fn-file">~2s</td></tr>
+        <tr><td class="fn-name">get_pose()</td><td class="fn-desc">Return current FSM state + IMU yaw</td><td class="fn-file">&lt;0.1s</td></tr>
+        <tr><td class="fn-name">turn_to_yaw(target)</td><td class="fn-desc">Rotate to absolute yaw angle</td><td class="fn-file">blocking</td></tr>
+        <tr><td class="fn-name">turn_relative(degrees)</td><td class="fn-desc">Rotate by relative angle</td><td class="fn-file">blocking</td></tr>
+        <tr><td class="fn-name">speak(text)</td><td class="fn-desc">TTS via edge-tts → AudioClient speaker</td><td class="fn-file">~3s/sentence</td></tr>
+        <tr><td class="fn-name">play_clip(path)</td><td class="fn-desc">Play any audio file through G1 speakers</td><td class="fn-file">ffmpeg decode</td></tr>
+        <tr><td class="fn-name">describe_view()</td><td class="fn-desc">Free-form scene description (legacy)</td><td class="fn-file">deprecated</td></tr>
+      </table>
+      <div style="margin-top:6px;font-size:12px;color:var(--text3);font-family:var(--mono)">Stubs: find_object, look_around, walk_forward, wifi_scan, get_battery, give_tour, navigate_to_landmark</div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Voice / text triggers → motion clips</div>
+      <div class="trigger-grid">
+        <div class="trigger-item"><span class="kw">dance rizz party</span><span class="arrow">→</span><span class="clip">Party dance</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item"><span class="kw">macarena</span><span class="arrow">→</span><span class="clip">Macarena</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item"><span class="kw">kick fight</span><span class="arrow">→</span><span class="clip">Standing kick</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item"><span class="kw">squat crouch</span><span class="arrow">→</span><span class="clip">Deep squat</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item"><span class="kw">lunge stretch</span><span class="arrow">→</span><span class="clip">Forward lunge</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item"><span class="kw">jump hop</span><span class="arrow">→</span><span class="clip">One-leg jump</span><span class="dur">16.7s</span></div>
+        <div class="trigger-item"><span class="kw">spin 360</span><span class="arrow">→</span><span class="clip">Walk-spin 360</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item"><span class="kw">tired lazy</span><span class="arrow">→</span><span class="clip">Tired lunge</span><span class="dur">27.0s</span></div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="launch-box"><span class="cmd">python3 ~/g1_tools/g1_dance_triggers.py --list</span>
+<span class="cmd">python3 ~/g1_tools/g1_dance_triggers.py --trigger "do the macarena"</span>
+<span class="cmd">python3 ~/g1_tools/g1_dance_triggers.py --trigger "show me your rizz" --dry-run</span></div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Thermal monitor / phantom-walk detection</div>
+      <div class="launch-box"><span class="cmd">python3 ~/g1_tools/g1_thermal_monitor.py</span>            <span class="cmt"># Log every 30s</span>
+<span class="cmd">python3 ~/g1_tools/g1_thermal_monitor.py --interval 10</span>  <span class="cmt"># Log every 10s</span>
+<span class="cmd">python3 ~/g1_tools/g1_thermal_monitor.py --verify-interval 60</span> <span class="cmt"># Check phantom-walk every 60s</span>
+
+<span class="cmt"># Logs: FSM state, battery SOC, Jetson thermals, IMU yaw delta</span>
+<span class="cmt"># Output: ~/g1_tools/logs/thermal_YYYYMMDD_HHMMSS.csv</span>
+<span class="cmt"># ALERT triggers when Move() produces 0° yaw change (phantom walk)</span></div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Motion data sources</div>
+      <div class="datasrc-list">
+        <div class="datasrc-item">
+          <div class="ds-title">GEAR-SONIC Deploy (on robot)</div>
+          <div class="ds-meta">~/GR00T-WholeBodyControl/gear_sonic_deploy/reference/</div>
+          <div class="ds-desc">8 base motions × 2 (mirrored) = 13 clips. CSV format: joint_pos, joint_vel, body_pos, body_quat. 29 joints @ 30fps.</div>
+        </div>
+        <div class="datasrc-item">
+          <div class="ds-title">BONES-SEED <span class="status-badge status-ok">OPEN</span></div>
+          <div class="ds-meta">HuggingFace — gate lifted 2026-03-16</div>
+          <div class="ds-desc">142,000 motions in G1 MuJoCo format. Convert via convert_motions.py. Largest public humanoid motion dataset.</div>
+        </div>
+        <div class="datasrc-item">
+          <div class="ds-title">openhe/g1-retargeted-motions</div>
+          <div class="ds-meta">HuggingFace — 174 sequences, 246 MB, .pkl format</div>
+          <div class="ds-desc">Dance (13 clips: bachata, salsa, hip-hop), kung fu (8), locomotion (113), sports (40). 23 DOF, 30fps. Mink retargeting pipeline.</div>
+        </div>
+        <div class="datasrc-item">
+          <div class="ds-title">Kimodo (NVIDIA)</div>
+          <div class="ds-meta">Text-to-motion diffusion — released 2026-03-16</div>
+          <div class="ds-desc">Generate G1 motion from English text in 2-5s. G1-specific weights available. Replaces teleoperation for training demos.</div>
+        </div>
+      </div>
+    </div>
+
+    <hr class="divider">
+
+    <div class="section">
+      <div class="section-label">Gemma 4 tool-calling patterns (validated on Orin NX)</div>
+      <div class="qr-box"><span class="hl">Single tool, always-call</span> — don't give skip option
+<span class="hl">2 required fields max</span> — each extra field doubles latency
+<span class="warn">No enums in schema</span> — validation cost is non-linear
+Don't put tool name in prompt text — model echoes it
+<span class="hl">keep_alive: "60m"</span> per request — prevent reload
+
+Cold: ~22s   Warm: <span class="hl">9-11s</span>   Model: gemma4:e2b-it-q4_K_M</div>
+    </div>
+  </div>
+
+  <!-- ===================== SHARED ===================== -->
+  <hr class="divider">
+
+  <div class="section">
+    <div class="section-label">Safety (all modes)</div>
+    <div class="safety-list">
+      <div class="safety-item crit"><strong>NEVER Damp/ZeroTorque while standing.</strong> Must StandDown first (FSM 4 → 1). Damping from standing drops the robot instantly.</div>
+      <div class="safety-item crit"><strong>Phantom walk (thermal throttle).</strong> After ~30 min, knee motors overheat (passive cooling only). MCU kills torque without updating FSM — robot still reports 501 but Move() does nothing. Only fix: power cycle. Run g1_thermal_monitor.py to detect early.</div>
+      <div class="safety-item crit"><strong>Never idle stand.</strong> Keep the robot moving or go to damping. The policy holds joints in high-torque positions when still, accelerating overheating.</div>
+      <div class="safety-item crit"><strong>Hip overheating:</strong> stiffness reduced to 75% (2026-04-02). Press F in terminal to check temps. If joints exceed 80°C, keep moving or damp.</div>
+      <div class="safety-item crit"><strong>Motors MUST get kp=0 kd=0</strong> explicitly before recovery or they seize. Never skip zero-torque step in shutdown.</div>
+      <div class="safety-item"><strong>FSM 501 requires app authorization.</strong> Walk mode only enters correctly via the full wake sequence: Damp(1) → StandUp(4) → BalanceMode(0) → Walk(501).</div>
+      <div class="safety-item"><strong>Forward jump (ID 17):</strong> high risk — ensure large clearance and a spotter.</div>
+      <div class="safety-item"><strong>Dance clips:</strong> motions may include arm swings, kicks, and jumps. Give the robot space.</div>
+      <div class="safety-item"><strong>Global drift:</strong> SONIC tracks local motion only — the robot will drift from its start position over time.</div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Launch</div>
+    <div class="launch-box"><span class="cmd">ssh</span> unitree@10.1.10.6  <span class="cmt"># WiFi via RoboCop (MT3000)</span>
+<span class="cmd">ssh</span> unitree@192.168.123.164 <span class="cmt"># via ethernet</span>
+
+<span class="cmt"># Cold boot → Walk mode (SDK control)</span>
+<span class="cmd">python3 ~/g1_tools/g1_wake.py --verify</span>
+
+<span class="cmt"># GEAR-SONIC gamepad control</span>
+<span class="cmd">~/launch_sonic.sh</span>        <span class="cmt"># planner locomotion</span>
+<span class="cmd">~/launch_sonic_dances.sh</span> <span class="cmt"># dance clip playback</span>
+<span class="cmt">→ Press Start on R3-1 after "Init Done"</span>
+
+<span class="cmt"># Background monitoring (run in separate SSH)</span>
+<span class="cmd">python3 ~/g1_tools/g1_thermal_monitor.py --interval 30</span></div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">Network</div>
+    <div class="chip-row">
+      <div class="chip"><span class="k">WiFi</span> 10.1.10.6 (RoboCop / MT3000)</div>
+      <div class="chip"><span class="k">ETH</span> 192.168.123.164</div>
+      <div class="chip"><span class="k">DDS</span> enP8p1s0</div>
+      <div class="chip"><span class="k">Ollama</span> :11434 (gemma4:e2b)</div>
+      <div class="chip"><span class="k">LiDAR</span> 192.168.123.20 (down)</div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+const motionSets = {
+  up: {
+    title: 'Standing set',
+    sub: 'Default on startup — D-Up anytime to return here',
+    type: 'list',
+    items: [
+      { id: 1, name: 'Slow walk', meta: '0.1–0.8 m/s', risk: 'low' },
+      { id: 2, name: 'Walk', meta: '0.8–2.5 m/s', risk: 'low' },
+      { id: 3, name: 'Run', meta: '2.5–7.5 m/s', risk: 'med' },
+      { id: 4, name: 'Forward jump', meta: 'One-shot', risk: 'high' },
+      { id: 5, name: 'Stealth walk', meta: 'Slow, crouched', risk: 'low' },
+      { id: 6, name: 'Injured walk', meta: 'Slow, limping', risk: 'low' },
+    ]
+  },
+  down: {
+    title: 'Squat / crawl set',
+    sub: 'L2 = lower height (min 0.2) · R2 = raise (max 0.8)',
+    type: 'list',
+    items: [
+      { id: 1, name: 'Idle squat', meta: 'Static, height adj', risk: 'low' },
+      { id: 2, name: 'Kneel (two legs)', meta: 'Height adj', risk: 'low' },
+      { id: 3, name: 'Kneel (one leg)', meta: 'Height adj', risk: 'low' },
+      { id: 4, name: 'Crawling', meta: 'Via kneel transition', risk: 'med' },
+      { id: 5, name: 'Elbow crawling', meta: 'Army crawl', risk: 'med' },
+    ]
+  },
+  left: {
+    title: 'Boxing set',
+    sub: 'Direct button map — no X/Y cycling. Punches revert in ~0.5s.',
+    type: 'boxing',
+    items: [
+      { key: 'X', name: 'Walk boxing', risk: 'low' },
+      { key: 'Y', name: 'Random punch', risk: 'med' },
+      { key: 'B', name: 'Idle boxing', risk: 'low' },
+      { key: 'L1', name: 'Left punch', risk: 'med' },
+      { key: 'R1', name: 'Right punch', risk: 'med' },
+      { key: 'L2', name: 'Left hook', risk: 'med' },
+      { key: 'R2', name: 'Right hook', risk: 'med' },
+    ]
+  },
+  right: {
+    title: 'Styled walking set',
+    sub: 'X = next · Y = previous · B = reset to Ledge Walking',
+    type: 'list',
+    items: [
+      { id: 1, name: 'Ledge walking', meta: 'Careful balance', risk: 'low' },
+      { id: 2, name: 'Object carrying', meta: 'Carrying pose', risk: 'low' },
+      { id: 3, name: 'Stealth walk 2', meta: 'Alt sneaky', risk: 'low' },
+      { id: 4, name: 'Happy dance walk', meta: 'Bouncy', risk: 'low' },
+      { id: 5, name: 'Zombie walk', meta: 'Shamble', risk: 'low' },
+      { id: 6, name: 'Gun walk', meta: 'Tactical', risk: 'low' },
+      { id: 7, name: 'Scare walk', meta: 'Creepy', risk: 'low' },
+    ]
+  }
+};
+
+const clips = [
+  { name: 'Dance in da Party', type: 'Dance', frames: '497' },
+  { name: 'Dance in da Party', type: 'Dance', frames: '497', mirror: true },
+  { name: 'Forward Lunge R', type: 'Lunge', frames: '399', mirror: true },
+  { name: 'Macarena', type: 'Dance', frames: '1375' },
+  { name: 'Macarena', type: 'Dance', frames: '1375', mirror: true },
+  { name: 'Neutral Kick R', type: 'Kick', frames: '165' },
+  { name: 'Neutral Kick R', type: 'Kick', frames: '165', mirror: true },
+  { name: 'Squat', type: 'Squat', frames: '424' },
+  { name: 'Tired Forward Lunge R', type: 'Lunge', frames: '810', mirror: true },
+  { name: 'Tired One-leg Jump R', type: 'Jump', frames: '500' },
+  { name: 'Tired One-leg Jump R', type: 'Jump', frames: '500', mirror: true },
+  { name: 'Walking Quip 360 R', type: 'Walk', frames: '455' },
+  { name: 'Walking Quip 360 R', type: 'Walk', frames: '455', mirror: true },
+];
+
+function riskCls(r) { return r === 'high' ? 'r-high' : r === 'med' ? 'r-med' : 'r-low'; }
+
+function showSet(dir) {
+  document.querySelectorAll('.dpad-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector('.dpad-' + { up:'up', down:'down', left:'left', right:'right' }[dir]).classList.add('active');
+  const s = motionSets[dir];
+  let h = '<div class="mp-title">' + s.title + '</div><div class="mp-sub">' + s.sub + '</div>';
+  if (s.type === 'boxing') {
+    h += '<div class="box-grid">';
+    s.items.forEach(i => {
+      h += '<div class="box-item"><span class="k">' + i.key + '</span><span style="flex:1;font-weight:500">' + i.name + '</span><span class="risk ' + riskCls(i.risk) + '">' + i.risk + '</span></div>';
+    });
+    h += '</div>';
+  } else {
+    s.items.forEach(i => {
+      h += '<div class="m-item"><span class="m-id">' + i.id + '</span><span class="m-name">' + i.name + '</span><span class="m-meta">' + i.meta + '</span><span class="risk ' + riskCls(i.risk) + '">' + i.risk + '</span></div>';
+    });
+  }
+  document.getElementById('set-panel').innerHTML = h;
+}
+
+function renderClips() {
+  let h = '';
+  clips.forEach((c, i) => {
+    h += '<div class="clip-item"><span class="clip-num">' + (i + 1) + '</span><span class="clip-name">' + c.name + '</span>';
+    if (c.mirror) h += '<span class="clip-mirror">Mirror</span>';
+    h += '<span class="clip-type">' + c.type + '</span><span class="clip-frames">' + c.frames + 'f</span></div>';
+  });
+  document.getElementById('clip-list').innerHTML = h;
+}
+
+function switchMode(mode) {
+  document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
+  const tabs = document.querySelectorAll('.mode-tab');
+  const map = { live: 0, planner: 1, dance: 2, sdk: 3 };
+  tabs[map[mode]].classList.add('active');
+  document.getElementById('panel-' + mode).classList.add('active');
+}
+
+// === Live Control API ===
+let API_BASE = 'http://10.1.10.6:8888';
+
+function updateApiBase() {
+  const ip = document.getElementById('robot-ip').value.trim();
+  API_BASE = 'http://' + ip + ':8888';
+  apiLog('API base: ' + API_BASE);
+}
+
+function apiLog(msg) {
+  const el = document.getElementById('api-log');
+  if (!el) return;
+  const ts = new Date().toLocaleTimeString();
+  el.innerHTML = '<span style="color:var(--text3)">[' + ts + ']</span> ' + msg + '\n' + el.innerHTML;
+  // Keep last 50 lines
+  const lines = el.innerHTML.split('\n');
+  if (lines.length > 50) el.innerHTML = lines.slice(0, 50).join('\n');
+}
+
+async function checkConnection() {
+  const badge = document.getElementById('conn-status');
+  const fsmBadge = document.getElementById('fsm-badge');
+  try {
+    badge.className = 'status-badge status-warn';
+    badge.textContent = 'Connecting...';
+    const r = await fetch(API_BASE + '/api/status', { signal: AbortSignal.timeout(3000) });
+    const data = await r.json();
+    badge.className = 'status-badge status-ok';
+    badge.textContent = 'Connected';
+    fsmBadge.style.display = 'inline-flex';
+    fsmBadge.textContent = 'FSM ' + data.fsm_id + ' (' + data.fsm_name + ')';
+    fsmBadge.className = 'status-badge ' + (data.ready ? 'status-ok' : 'status-warn');
+    apiLog('<span style="color:var(--green)">Connected</span> — FSM ' + data.fsm_id + ' (' + data.fsm_name + '), uptime ' + data.uptime_s + 's');
+  } catch (e) {
+    badge.className = 'status-badge status-err';
+    badge.textContent = 'Disconnected';
+    fsmBadge.style.display = 'none';
+    apiLog('<span style="color:var(--red)">Connection failed</span> — is g1_trigger_server.py running on ' + API_BASE + '?');
+  }
+}
+
+async function apiTrigger(text) {
+  if (!text) return;
+  apiLog('Triggering: <span style="color:var(--accent)">' + text + '</span>...');
+  const resultEl = document.getElementById('trigger-result');
+  try {
+    const r = await fetch(API_BASE + '/api/trigger', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text }),
+      signal: AbortSignal.timeout(5000),
+    });
+    const data = await r.json();
+    if (r.ok) {
+      resultEl.innerHTML = '<span style="color:var(--accent)">▶ ' + data.matched + '</span> — ' + data.clip_name + ' (' + data.duration_s + 's, ' + data.frames + 'f)';
+      apiLog('<span style="color:var(--green)">Triggered</span>: ' + data.matched + ' → ' + data.clip_name + ' (' + data.duration_s + 's)');
+    } else {
+      resultEl.innerHTML = '<span style="color:var(--red)">✗ ' + (data.error || 'Unknown error') + '</span>';
+      apiLog('<span style="color:var(--red)">No match</span>: ' + text + ' — ' + (data.hint || ''));
+    }
+  } catch (e) {
+    resultEl.innerHTML = '<span style="color:var(--red)">✗ Connection error</span>';
+    apiLog('<span style="color:var(--red)">Error</span>: ' + e.message);
+  }
+}
+
+async function apiStop() {
+  apiLog('<span style="color:var(--red)">EMERGENCY STOP</span>');
+  try {
+    const r = await fetch(API_BASE + '/api/stop', { method: 'POST', signal: AbortSignal.timeout(5000) });
+    const data = await r.json();
+    apiLog('Damped from FSM ' + data.previous_fsm);
+    checkConnection();
+  } catch (e) {
+    apiLog('<span style="color:var(--red)">Stop failed</span>: ' + e.message);
+  }
+}
+
+async function apiWake() {
+  apiLog('Waking robot (this takes ~15s)...');
+  document.getElementById('trigger-result').innerHTML = '<span style="color:var(--amber)">Waking... Damp → StandUp → Balance → Walk</span>';
+  try {
+    const r = await fetch(API_BASE + '/api/wake', { method: 'POST', signal: AbortSignal.timeout(60000) });
+    const data = await r.json();
+    apiLog('<span style="color:var(--green)">Wake complete</span> — FSM ' + data.fsm_id + ' (' + data.status + ')');
+    document.getElementById('trigger-result').innerHTML = '<span style="color:var(--green)">✓ Robot awake — FSM ' + data.fsm_id + '</span>';
+    checkConnection();
+  } catch (e) {
+    apiLog('<span style="color:var(--red)">Wake failed</span>: ' + e.message);
+    document.getElementById('trigger-result').innerHTML = '<span style="color:var(--red)">✗ Wake failed</span>';
+  }
+}
+
+async function apiSonicStatus() {
+  try {
+    const r = await fetch(API_BASE + '/api/sonic/status', { signal: AbortSignal.timeout(3000) });
+    const d = await r.json();
+    const label = document.getElementById('sonic-label');
+    const chip = document.getElementById('sonic-chip');
+    if (d.running) {
+      label.textContent = 'Stop GEAR-SONIC (pid ' + d.pid + ')';
+      chip.classList.add('danger');
+    } else {
+      label.textContent = 'Start GEAR-SONIC (R3 + ZMQ)';
+      chip.classList.remove('danger');
+    }
+    return d.running;
+  } catch (e) { return null; }
+}
+
+async function apiSonicToggle() {
+  const running = await apiSonicStatus();
+  if (running) {
+    apiLog('<span style="color:var(--amber)">Stopping GEAR-SONIC…</span>');
+    try {
+      const r = await fetch(API_BASE + '/api/sonic/stop', { method: 'POST', signal: AbortSignal.timeout(5000) });
+      const d = await r.json();
+      apiLog('Sonic stopped (was pid ' + (d.pid || '?') + ')');
+    } catch (e) { apiLog('<span style="color:var(--red)">Sonic stop failed</span>: ' + e.message); }
+  } else {
+    apiLog('<span style="color:var(--amber)">Starting GEAR-SONIC (gamepad_manager). Press R3 Start after init; press F1 to enter ZMQ clip mode.</span>');
+    try {
+      const r = await fetch(API_BASE + '/api/sonic/start', { method: 'POST', signal: AbortSignal.timeout(5000) });
+      const d = await r.json();
+      if (r.ok) apiLog('<span style="color:var(--green)">Sonic launching</span> (pid ' + d.pid + '). Policy load ~10-20s.');
+      else apiLog('<span style="color:var(--red)">Sonic start failed</span>: ' + (d.error || r.status));
+    } catch (e) { apiLog('<span style="color:var(--red)">Sonic start failed</span>: ' + e.message); }
+  }
+  setTimeout(apiSonicStatus, 1500);
+}
+
+// Poll sonic status every 5s while the page is open.
+setInterval(apiSonicStatus, 5000);
+window.addEventListener('load', () => setTimeout(apiSonicStatus, 500));
+
+// === Speech control ===
+async function apiSpeak(text) {
+  if (!text) return;
+  const el = document.getElementById('speak-result');
+  el.innerHTML = '<span style="color:var(--amber)">Speaking...</span>';
+  apiLog('Speaking: <span style="color:var(--purple)">"' + text + '"</span>');
+  try {
+    const r = await fetch(API_BASE + '/api/speak', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text: text }),
+      signal: AbortSignal.timeout(20000),
+    });
+    const data = await r.json();
+    if (r.ok) {
+      el.innerHTML = '<span style="color:var(--green)">Spoke: "' + data.text + '"</span>';
+      apiLog('<span style="color:var(--green)">Spoken</span>: "' + data.text + '" via ' + data.voice);
+    } else {
+      el.innerHTML = '<span style="color:var(--red)">Error: ' + (data.error || 'failed') + '</span>';
+      apiLog('<span style="color:var(--red)">Speak error</span>: ' + (data.error || ''));
+    }
+  } catch (e) {
+    el.innerHTML = '<span style="color:var(--red)">Connection error</span>';
+    apiLog('<span style="color:var(--red)">Speak error</span>: ' + e.message);
+  }
+}
+
+async function apiArnold(lineId) {
+  const el = document.getElementById('speak-result');
+  el.innerHTML = '<span style="color:var(--amber)">Arnold loading...</span>';
+  apiLog('Arnold: <span style="color:var(--red)">' + lineId + '</span>');
+  try {
+    const r = await fetch(API_BASE + '/api/arnold/' + lineId, {
+      method: 'POST',
+      signal: AbortSignal.timeout(20000),
+    });
+    const data = await r.json();
+    if (r.ok) {
+      el.innerHTML = '<span style="color:var(--green)">🤖 "' + data.text + '"</span>';
+      apiLog('<span style="color:var(--green)">Arnold</span>: "' + data.text + '"');
+    } else {
+      el.innerHTML = '<span style="color:var(--red)">' + (data.error || 'failed') + '</span>';
+    }
+  } catch (e) {
+    el.innerHTML = '<span style="color:var(--red)">Connection error</span>';
+  }
+}
+
+// === Joystick control ===
+let moveSpeed = 0.8; // m/s max
+let joyMoveX = 0, joyMoveY = 0, joyTurnZ = 0;
+let joySendInterval = null;
+
+function setMoveSpeed(s) { moveSpeed = s; apiLog('Speed set to ' + s + ' m/s'); }
+
+function joyStop() {
+  joyMoveX = 0; joyMoveY = 0; joyTurnZ = 0;
+  updateJoyReadout();
+  sendMove(0, 0, 0);
+  // Reset thumbs
+  const mt = document.getElementById('joy-move-thumb');
+  const tt = document.getElementById('joy-turn-thumb');
+  if (mt) { mt.style.left = '65px'; mt.style.top = '65px'; }
+  if (tt) { tt.style.left = '65px'; tt.style.top = '65px'; }
+}
+
+function updateJoyReadout() {
+  const vx = (joyMoveY * moveSpeed).toFixed(2);
+  const vy = (-joyMoveX * moveSpeed * 0.5).toFixed(2);
+  const wz = (-joyTurnZ * 1.5).toFixed(2);
+  document.getElementById('joy-vx').textContent = vx;
+  document.getElementById('joy-vy').textContent = vy;
+  document.getElementById('joy-wz').textContent = wz;
+  const speed = Math.sqrt(vx*vx + vy*vy);
+  const mode = speed < 0.05 && Math.abs(wz) < 0.05 ? 'Idle' :
+               speed > 1.5 ? 'Running' : speed > 0.3 ? 'Walking' : 'Turning';
+  document.getElementById('joy-mode').textContent = mode;
+}
+
+async function sendMove(vx, vy, wz) {
+  try {
+    await fetch(API_BASE + '/api/move', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vx, vy, wz }),
+      signal: AbortSignal.timeout(2000),
+    });
+  } catch (e) { /* silent on move errors */ }
+}
+
+function initJoystick(containerId, thumbId, onMove) {
+  const container = document.getElementById(containerId);
+  const thumb = document.getElementById(thumbId);
+  if (!container || !thumb) return;
+
+  const R = 90; // container radius
+  const TR = 25; // thumb radius
+  const MAX = R - TR; // max displacement
+  let active = false;
+
+  function getPos(e) {
+    const rect = container.getBoundingClientRect();
+    const cx = rect.left + R, cy = rect.top + R;
+    const touch = e.touches ? e.touches[0] : e;
+    let dx = touch.clientX - cx, dy = touch.clientY - cy;
+    const dist = Math.sqrt(dx*dx + dy*dy);
+    if (dist > MAX) { dx = dx/dist*MAX; dy = dy/dist*MAX; }
+    return { dx, dy, nx: dx/MAX, ny: dy/MAX };
+  }
+
+  function start(e) { e.preventDefault(); active = true; move(e); }
+  function move(e) {
+    if (!active) return;
+    e.preventDefault();
+    const p = getPos(e);
+    thumb.style.left = (R - TR + p.dx) + 'px';
+    thumb.style.top = (R - TR + p.dy) + 'px';
+    onMove(p.nx, p.ny);
+  }
+  function end() {
+    active = false;
+    thumb.style.left = (R - TR) + 'px';
+    thumb.style.top = (R - TR) + 'px';
+    onMove(0, 0);
+  }
+
+  thumb.addEventListener('mousedown', start);
+  thumb.addEventListener('touchstart', start, { passive: false });
+  window.addEventListener('mousemove', move);
+  window.addEventListener('touchmove', move, { passive: false });
+  window.addEventListener('mouseup', end);
+  window.addEventListener('touchend', end);
+}
+
+// Init joysticks after DOM ready
+initJoystick('joy-move', 'joy-move-thumb', function(nx, ny) {
+  joyMoveX = nx; joyMoveY = -ny; // invert Y: up = forward
+  updateJoyReadout();
+});
+initJoystick('joy-turn', 'joy-turn-thumb', function(nx, ny) {
+  joyTurnZ = nx;
+  updateJoyReadout();
+});
+
+// Send Move commands at 5Hz while joystick is active
+setInterval(function() {
+  if (Math.abs(joyMoveX) > 0.05 || Math.abs(joyMoveY) > 0.05 || Math.abs(joyTurnZ) > 0.05) {
+    const vx = joyMoveY * moveSpeed;
+    const vy = -joyMoveX * moveSpeed * 0.5;
+    const wz = -joyTurnZ * 1.5;
+    sendMove(vx, vy, wz);
+  }
+}, 200);
+
+showSet('up');
+renderClips();
+</script>
+</body>
+</html>
