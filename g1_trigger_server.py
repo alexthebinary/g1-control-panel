@@ -441,14 +441,19 @@ def run_action(req: ActionRequest):
     client = _get_arm_client()
     try:
         if req.id is not None:
-            # integer id path — arm gestures
+            # Integer id path — arm gestures.
             code, data = client._Call(7106, _json.dumps({"data": req.id}))
             return {"kind": "gesture", "id": req.id, "code": code, "msg": data}
         if req.name is not None:
-            # name path — training recordings
-            code, data = client._Call(7106, _json.dumps({"name": req.name}))
-            return {"kind": "recording", "name": req.name, "code": code, "msg": data}
-        return JSONResponse(status_code=400, content={"error": "need id or name"})
+            # Training-recording path is unsupported. Sending {"name": ...} to API 7106
+            # silently poisons the arm SDK into ARMSDK_OCCUPIED on this firmware —
+            # subsequent gesture calls return 7400 until the robot's FSM is reset.
+            # The official path for recordings is the Unitree Explore app.
+            return JSONResponse(status_code=400, content={
+                "error": "recordings-by-name not supported — use Unitree Explore app",
+                "name": req.name,
+            })
+        return JSONResponse(status_code=400, content={"error": "need id"})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
