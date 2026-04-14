@@ -274,6 +274,7 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
     <button class="mode-tab active" onclick="switchMode('live')">Live control</button>
     <button class="mode-tab" onclick="switchMode('planner')">Planner locomotion</button>
     <button class="mode-tab" onclick="switchMode('dance')">Dance clip playback</button>
+    <button class="mode-tab" onclick="switchMode('experimental')">Experimental (OOD)</button>
     <button class="mode-tab" onclick="switchMode('sdk')">SDK control</button>
   </div>
 
@@ -341,7 +342,7 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
 
     <div class="section">
       <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.55">
-        <div style="font-weight:600;color:var(--text);margin-bottom:6px">G1 EDU+ · full action library on this unit</div>
+        <div style="font-weight:600;color:var(--text);margin-bottom:6px">G1 EDU+ · demo lineup</div>
         <div style="color:var(--text2)">
           <span style="color:var(--green);font-weight:600">✓</span>
           <b>23 arm gestures</b> + <b>19 Training Mode recordings</b> (3 dances: Waist Drum, Spin Discs, Throw Money) — live via <code>G1ArmActionClient</code>, requires FSM 501 · Sonic OFF
@@ -350,47 +351,20 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
           <span style="color:var(--green);font-weight:600">✓</span>
           <b>8 NVIDIA GEAR-SONIC clips</b> <span class="id-badge">TRAINED</span> — ZMQ stream while Sonic running, F1 first then click
         </div>
-        <div style="color:var(--text3);margin-top:3px">
-          <span style="color:var(--amber);font-weight:600">!</span>
-          <b>16 community-retargeted clips</b> <span class="ood-badge">OOD</span> — available but missing <code>body_quat.csv</code>, policy may refuse or flop
-        </div>
         <div style="color:var(--text3);margin-top:6px;font-size:11px">
-          <b>Not installed (commercial):</b> Unitree Dancing SDK — $33,400, 2-mo lead, 8 dances: Tai Chi, Love You, Robot Dance, Victory, APT, Qinghai Shake, Bunny, Ace of Spades.
+          16 community-retargeted clips (Charleston, Capoeira, Bruce Lee, …) live in the <b>Experimental (OOD)</b> tab — they're missing <code>body_quat.csv</code> so the policy usually refuses. Don't click those in front of a crowd.
         </div>
       </div>
-      <div class="section-label">Motion clips <span class="id-badge">TRAINED</span> track well · <span class="ood-badge">OOD</span> experimental</div>
-      <div class="cat-pills" id="cat-pills">
-        <button class="cat-pill active" data-cat="all">All</button>
-        <button class="cat-pill" data-cat="trained">Trained only</button>
-        <button class="cat-pill" data-cat="dance">Dances</button>
-        <button class="cat-pill" data-cat="expression">Expression</button>
-        <button class="cat-pill" data-cat="martial">Martial</button>
-        <button class="cat-pill" data-cat="athletic">Athletic</button>
-      </div>
+      <div class="section-label">Trained GEAR-SONIC clips <span class="id-badge">TRAINED</span> · all 8 click-to-run</div>
       <div class="trigger-grid" id="clip-grid">
-        <div class="trigger-item" data-cat="dance" data-id="1" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="id-badge">TRAINED</span><span class="dur">16.6s</span></div>
-        <div class="trigger-item" data-cat="dance" data-id="1" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="id-badge">TRAINED</span><span class="dur">45.8s</span></div>
-        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="ood-badge">OOD</span><span class="dur">138.1s</span></div>
-        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="ood-badge">OOD</span><span class="dur">20.3s</span></div>
-        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="ood-badge">OOD</span><span class="dur">99.8s</span></div>
-        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="ood-badge">OOD</span><span class="dur">131.5s</span></div>
-        <div class="trigger-item ood" data-cat="dance" data-id="0" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="ood-badge">OOD</span><span class="dur">225.7s</span></div>
-        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="ood-badge">OOD</span><span class="dur">26.8s</span></div>
-        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="ood-badge">OOD</span><span class="dur">27.8s</span></div>
-        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="ood-badge">OOD</span><span class="dur">10.7s</span></div>
-        <div class="trigger-item ood" data-cat="expression" data-id="0" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="ood-badge">OOD</span><span class="dur">50.7s</span></div>
-        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="ood-badge">OOD</span><span class="dur">11.0s</span></div>
-        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="ood-badge">OOD</span><span class="dur">5.3s</span></div>
-        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="ood-badge">OOD</span><span class="dur">6.0s</span></div>
-        <div class="trigger-item" data-cat="martial" data-id="1" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Kick</span><span class="id-badge">TRAINED</span><span class="dur">5.5s</span></div>
-        <div class="trigger-item ood" data-cat="martial" data-id="0" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="ood-badge">OOD</span><span class="dur">244.9s</span></div>
-        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Squat</span><span class="id-badge">TRAINED</span><span class="dur">14.1s</span></div>
-        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Lunge</span><span class="id-badge">TRAINED</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">Jump</span><span class="id-badge">TRAINED</span><span class="dur">16.7s</span></div>
-        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="ood-badge">OOD</span><span class="dur">4.8s</span></div>
-        <div class="trigger-item" data-cat="athletic" data-id="1" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="id-badge">TRAINED</span><span class="dur">15.2s</span></div>
-        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="ood-badge">OOD</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item ood" data-cat="athletic" data-id="0" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="ood-badge">OOD</span><span class="dur">168.2s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="id-badge">TRAINED</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="id-badge">TRAINED</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="id-badge">TRAINED</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Standing kick</span><span class="id-badge">TRAINED</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Forward lunge</span><span class="id-badge">TRAINED</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Deep squat</span><span class="id-badge">TRAINED</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('tired')"><span class="kw">Tired lunge</span><span class="id-badge">TRAINED</span><span class="dur">27.0s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">One-leg jump</span><span class="id-badge">TRAINED</span><span class="dur">16.7s</span></div>
       </div>
     </div>
 
@@ -403,8 +377,8 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
       </div>
     </details>
 
-    <details class="collapsible">
-      <summary>Training Mode recordings · <span style="text-transform:none;color:var(--text2);font-weight:500">custom motions via Explore app</span></summary>
+    <details class="collapsible" open>
+      <summary>Training Mode recordings · <span style="text-transform:none;color:var(--text2);font-weight:500">3 dances + 16 gestures · FSM 501 · Sonic OFF</span></summary>
       <div class="details-body">
         <div class="trigger-grid" id="recording-grid">
           <div style="color:var(--text3);font-size:12px;font-family:var(--mono);padding:8px">Loading…</div>
@@ -446,7 +420,7 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
   </div>
 
   <!-- ===================== PLANNER MODE ===================== -->
-  <div class="mode-panel active" id="panel-planner">
+  <div class="mode-panel" id="panel-planner">
 
     <div class="section">
       <div class="section-label">System</div>
@@ -571,6 +545,55 @@ L2     = Kick         R2      = Jump
 <span class="hl">L1</span> = Prev clip       <span class="hl">R1</span> = Next clip
 X/Y = Recalibrate heading
 <span class="hl">F1</span> = Toggle planner on/off</div>
+    </div>
+  </div>
+
+  <!-- ===================== EXPERIMENTAL (OOD) ===================== -->
+  <div class="mode-panel" id="panel-experimental">
+    <div class="section">
+      <div style="background:var(--bg2);border:1px solid var(--amber-border);border-left:3px solid var(--amber);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.55">
+        <div style="font-weight:600;color:var(--amber);margin-bottom:6px">⚠ These clips are out-of-distribution — expect failures</div>
+        <div style="color:var(--text2)">
+          16 clips from <code>openhe/g1-retargeted-motions</code> + BONES-SEED retargeting. They ship without <code>body_quat.csv</code>, so the WBC encoder errors with <i>"No motion_body_quat data available"</i> and refuses to run. Some may partially execute; most will flop or do nothing.
+        </div>
+        <div style="color:var(--text3);margin-top:6px;font-size:11px">
+          Keep here for testing / later retargeting. <b>Not for live demos.</b> Trained lineup is on the Live control tab.
+        </div>
+      </div>
+      <div class="section-label">Dances · community retargeted <span class="ood-badge">OOD</span></div>
+      <div class="trigger-grid">
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('hip hop')"><span class="kw">Hip-hop</span><span class="ood-badge">OOD</span><span class="dur">138.1s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('charleston')"><span class="kw">Charleston</span><span class="ood-badge">OOD</span><span class="dur">20.3s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('capoeira')"><span class="kw">Capoeira</span><span class="ood-badge">OOD</span><span class="dur">99.8s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('freestyle')"><span class="kw">Freestyle 1</span><span class="ood-badge">OOD</span><span class="dur">131.5s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('dance battle')"><span class="kw">Freestyle 2</span><span class="ood-badge">OOD</span><span class="dur">225.7s</span></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Expression <span class="ood-badge">OOD</span></div>
+      <div class="trigger-grid">
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('happy')"><span class="kw">Happy</span><span class="ood-badge">OOD</span><span class="dur">26.8s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('excited')"><span class="kw">Excited</span><span class="ood-badge">OOD</span><span class="dur">27.8s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('sway')"><span class="kw">Chill sway</span><span class="ood-badge">OOD</span><span class="dur">10.7s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('conversation')"><span class="kw">Gesture</span><span class="ood-badge">OOD</span><span class="dur">50.7s</span></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Martial <span class="ood-badge">OOD</span></div>
+      <div class="trigger-grid">
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('bruce lee')"><span class="kw">Bruce Lee</span><span class="ood-badge">OOD</span><span class="dur">11.0s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('roundhouse')"><span class="kw">Roundhouse</span><span class="ood-badge">OOD</span><span class="dur">5.3s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('side kick')"><span class="kw">Side kick</span><span class="ood-badge">OOD</span><span class="dur">6.0s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('fight')"><span class="kw">Fight</span><span class="ood-badge">OOD</span><span class="dur">244.9s</span></div>
+      </div>
+    </div>
+    <div class="section">
+      <div class="section-label">Athletic <span class="ood-badge">OOD</span></div>
+      <div class="trigger-grid">
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('cartwheel')"><span class="kw">Cartwheel</span><span class="ood-badge">OOD</span><span class="dur">4.8s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('crawl')"><span class="kw">Crawl</span><span class="ood-badge">OOD</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item ood" style="cursor:pointer" onclick="apiTrigger('fall')"><span class="kw">Fall+recover</span><span class="ood-badge">OOD</span><span class="dur">168.2s</span></div>
+      </div>
     </div>
   </div>
 
@@ -834,7 +857,7 @@ function switchMode(mode) {
   document.querySelectorAll('.mode-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.mode-panel').forEach(p => p.classList.remove('active'));
   const tabs = document.querySelectorAll('.mode-tab');
-  const map = { live: 0, planner: 1, dance: 2, sdk: 3 };
+  const map = { live: 0, planner: 1, dance: 2, experimental: 3, sdk: 4 };
   tabs[map[mode]].classList.add('active');
   document.getElementById('panel-' + mode).classList.add('active');
 }
