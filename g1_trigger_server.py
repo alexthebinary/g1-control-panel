@@ -412,6 +412,15 @@ def _get_arm_client():
     c = G1ArmActionClient()
     c.SetTimeout(10.0)
     c.Init()
+    # Register EXECUTE_CUSTOM_ACTION (7108) + STOP_CUSTOM_ACTION (7113) for
+    # Training Mode recordings — the Python SDK's Init() only registers the
+    # preset-gesture APIs, but the firmware supports these on the same service.
+    # Payload for 7108: {"action_name": "<name>"}; for 7113: {}.
+    try:
+        c._RegistApi(7108, 0)
+        c._RegistApi(7113, 0)
+    except Exception:
+        pass
     _arm_client = c
     return _arm_client
 
@@ -434,6 +443,41 @@ def list_actions():
         return JSONResponse(status_code=500, content={"error": str(e)})
 
 
+class ComboRequest(BaseModel):
+    id: int
+    clip: str
+
+
+@app.post("/api/combo")
+def run_combo(req: ComboRequest):
+    """Fire a gesture and play a sound clip in parallel."""
+    if "/" in req.clip or ".." in req.clip:
+        return JSONResponse(status_code=400, content={"error": "invalid clip name"})
+    clip_path = CLIPS_DIR / req.clip
+    if not clip_path.is_file():
+        return JSONResponse(status_code=404, content={"error": f"clip not found: {req.clip}"})
+    import json as _json
+    # Kick off the clip (subprocess) first so audio starts immediately,
+    # then fire the gesture RPC. Both proceed in parallel after this point.
+    clip_proc = subprocess.Popen(
+        ["python3", "/home/unitree/g1_tools/g1_play_clip.py", str(clip_path), "--gain", "2.5"],
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    try:
+        client = _get_arm_client()
+        code, data = client._Call(7106, _json.dumps({"data": req.id}))
+    except Exception as e:
+        clip_proc.terminate()
+        return JSONResponse(status_code=500, content={"error": str(e), "clip_pid": clip_proc.pid})
+    return {
+        "gesture_id": req.id,
+        "clip": req.clip,
+        "gesture_code": code,
+        "gesture_msg": data,
+        "clip_pid": clip_proc.pid,
+    }
+
+
 @app.post("/api/action")
 def run_action(req: ActionRequest):
     """Trigger an arm gesture by id OR training recording by name."""
@@ -441,19 +485,30 @@ def run_action(req: ActionRequest):
     client = _get_arm_client()
     try:
         if req.id is not None:
-            # Integer id path — arm gestures.
+            # Integer id path — preset arm gestures via API 7106.
             code, data = client._Call(7106, _json.dumps({"data": req.id}))
             return {"kind": "gesture", "id": req.id, "code": code, "msg": data}
         if req.name is not None:
-            # Training-recording path is unsupported. Sending {"name": ...} to API 7106
-            # silently poisons the arm SDK into ARMSDK_OCCUPIED on this firmware —
-            # subsequent gesture calls return 7400 until the robot's FSM is reset.
-            # The official path for recordings is the Unitree Explore app.
-            return JSONResponse(status_code=400, content={
-                "error": "recordings-by-name not supported — use Unitree Explore app",
-                "name": req.name,
-            })
-        return JSONResponse(status_code=400, content={"error": "need id"})
+            # Training-mode recording via API 7108 with {"action_name": <name>}.
+            # Do NOT send {"name": ...} to 7106 — that payload shape silently
+            # poisons the arm SDK into ARMSDK_OCCUPIED.
+            code, data = client._Call(7108, _json.dumps({"action_name": req.name}))
+            return {"kind": "recording", "name": req.name, "code": code, "msg": data}
+        return JSONResponse(status_code=400, content={"error": "need id or name"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
+@app.post("/api/action/stop")
+def stop_custom_action():
+    """Interrupt a running Training Mode recording (API 7113)."""
+    import json as _json
+    try:
+        client = _get_arm_client()
+        code, data = client._Call(7113, _json.dumps({}))
+        return {"code": code, "msg": data}
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
     except Exception as e:
         return JSONResponse(status_code=500, content={"error": str(e)})
 
