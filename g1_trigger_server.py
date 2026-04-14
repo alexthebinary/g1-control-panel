@@ -311,6 +311,48 @@ def speak_arnold(line_id: str):
     return speak_text(SpeakRequest(text=text, voice="en-US-GuyNeural"))
 
 
+CLIPS_DIR = Path("/home/unitree/g1_tools/clips")
+
+
+@app.get("/api/clips")
+def list_clips():
+    """List original sound clips in CLIPS_DIR (excludes tour intro/outro)."""
+    if not CLIPS_DIR.exists():
+        return {"clips": []}
+    exts = (".wav", ".mp3", ".ogg", ".flac", ".m4a")
+    excluded_prefixes = ("auto_tour_",)
+    clips = sorted(
+        p.name for p in CLIPS_DIR.iterdir()
+        if p.suffix.lower() in exts and not p.name.startswith(excluded_prefixes)
+    )
+    return {"clips": clips}
+
+
+@app.post("/api/clip/{name}")
+def play_clip(name: str):
+    """Play an audio clip from CLIPS_DIR through G1 speakers."""
+    # Sanitize: no path traversal, must be a real file in CLIPS_DIR.
+    if "/" in name or ".." in name:
+        return JSONResponse(status_code=400, content={"error": "invalid name"})
+    path = CLIPS_DIR / name
+    if not path.is_file():
+        return JSONResponse(status_code=404, content={"error": f"not found: {name}"})
+    try:
+        result = subprocess.run(
+            ["python3", "/home/unitree/g1_tools/g1_play_clip.py", str(path)],
+            capture_output=True, text=True, timeout=30,
+        )
+        return {
+            "clip": name,
+            "status": "played" if result.returncode == 0 else "error",
+            "output": result.stdout.strip()[-200:] or result.stderr.strip()[-200:],
+        }
+    except subprocess.TimeoutExpired:
+        return JSONResponse(status_code=504, content={"error": "playback timed out"})
+    except Exception as e:
+        return JSONResponse(status_code=500, content={"error": str(e)})
+
+
 def _sonic_running_pid() -> int:
     """Return live pid if the sonic binary is running, else 0."""
     # Prefer pidfile; fall back to pgrep on the binary name.

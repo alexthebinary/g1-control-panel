@@ -281,90 +281,13 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
   <!-- ===================== LIVE CONTROL ===================== -->
   <div class="mode-panel active" id="panel-live">
 
-    <!-- Workflow stepper -->
-    <div class="stepper" id="stepper">
-      <div class="step" data-step="wake"><span class="n">1</span><div class="txt"><b>Wake</b><span class="hint">Damp → StandUp → Walk (FSM 501)</span></div></div>
-      <div class="step" data-step="sonic"><span class="n">2</span><div class="txt"><b>Start Sonic</b><span class="hint">Launch gamepad_manager (~15 s)</span></div></div>
-      <div class="step" data-step="r3"><span class="n">3</span><div class="txt"><b>R3 Start</b><span class="hint">Activate policy on the remote</span></div></div>
-      <div class="step" data-step="play"><span class="n">4</span><div class="txt"><b>F1 → Clip</b><span class="hint">F1 enters ZMQ; click clip; D-pad returns to walk</span></div></div>
-    </div>
-
     <div class="section">
       <div class="section-label">System</div>
       <div class="chip-row">
         <div class="chip" style="cursor:pointer" onclick="apiWake()"><span class="k" style="background:var(--green-bg);color:var(--green);border-color:var(--green-border)">Wake</span> Stand up → Walk (FSM 501)</div>
-        <div class="chip" id="sonic-chip" style="cursor:pointer" onclick="apiSonicToggle()"><span class="k" id="sonic-k" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border)">Sonic</span> <span id="sonic-label">Start GEAR-SONIC (R3 + ZMQ)</span></div>
       </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Walk / Run — virtual joystick</div>
-      <div class="joystick-area">
-        <div>
-          <div class="joystick-container" id="joy-move">
-            <div class="joystick-bg"></div>
-            <div class="joystick-thumb" id="joy-move-thumb"></div>
-          </div>
-          <div class="joystick-label">Move (L-stick)</div>
-        </div>
-        <div>
-          <div class="joystick-container" id="joy-turn">
-            <div class="joystick-bg"></div>
-            <div class="joystick-thumb" id="joy-turn-thumb"></div>
-          </div>
-          <div class="joystick-label">Turn (R-stick)</div>
-        </div>
-        <div style="flex:1;min-width:180px">
-          <div class="joystick-readout" id="joy-readout">
-            vx: <span class="val" id="joy-vx">0.00</span> m/s<br>
-            vy: <span class="val" id="joy-vy">0.00</span> m/s<br>
-            ωz: <span class="val" id="joy-wz">0.00</span> rad/s<br>
-            <span id="joy-mode" style="color:var(--text3)">Idle</span>
-          </div>
-          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
-            <button onclick="setMoveSpeed(0.8)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Walk</span> 0.8</button>
-            <button onclick="setMoveSpeed(2.0)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Run</span> 2.0</button>
-            <button onclick="setMoveSpeed(0.3)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Slow</span> 0.3</button>
-            <button onclick="joyStop()" class="chip danger" style="cursor:pointer;font-size:11px"><span class="k">Stop</span></button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Quick trigger</div>
-      <div style="display:flex;gap:8px;margin-bottom:16px">
-        <input type="text" id="trigger-input" placeholder="Type: hip hop, charleston, cartwheel..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiTrigger(this.value)">
-        <button onclick="apiTrigger(document.getElementById('trigger-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:var(--bg);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">GO</button>
-      </div>
-      <div id="trigger-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:20px"></div>
-    </div>
-
-    <div class="section">
-      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.55">
-        <div style="font-weight:600;color:var(--text);margin-bottom:6px">G1 EDU+ · demo lineup</div>
-        <div style="color:var(--text2)">
-          <span style="color:var(--green);font-weight:600">✓</span>
-          <b>23 arm gestures</b> + <b>19 Training Mode recordings</b> (3 dances: Waist Drum, Spin Discs, Throw Money) — live via <code>G1ArmActionClient</code>, requires FSM 501 · Sonic OFF
-        </div>
-        <div style="color:var(--text2);margin-top:3px">
-          <span style="color:var(--green);font-weight:600">✓</span>
-          <b>8 NVIDIA GEAR-SONIC clips</b> <span class="id-badge">TRAINED</span> — ZMQ stream while Sonic running, F1 first then click
-        </div>
-        <div style="color:var(--text3);margin-top:6px;font-size:11px">
-          16 community-retargeted clips (Charleston, Capoeira, Bruce Lee, …) live in the <b>Experimental (OOD)</b> tab — they're missing <code>body_quat.csv</code> so the policy usually refuses. Don't click those in front of a crowd.
-        </div>
-      </div>
-      <div class="section-label">Trained GEAR-SONIC clips <span class="id-badge">TRAINED</span> · all 8 click-to-run</div>
-      <div class="trigger-grid" id="clip-grid">
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="id-badge">TRAINED</span><span class="dur">16.6s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="id-badge">TRAINED</span><span class="dur">45.8s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="id-badge">TRAINED</span><span class="dur">15.2s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Standing kick</span><span class="id-badge">TRAINED</span><span class="dur">5.5s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Forward lunge</span><span class="id-badge">TRAINED</span><span class="dur">13.3s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Deep squat</span><span class="id-badge">TRAINED</span><span class="dur">14.1s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('tired')"><span class="kw">Tired lunge</span><span class="id-badge">TRAINED</span><span class="dur">27.0s</span></div>
-        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">One-leg jump</span><span class="id-badge">TRAINED</span><span class="dur">16.7s</span></div>
+      <div style="margin-top:8px;font-size:11px;color:var(--text3);font-family:var(--mono)">
+        Click any tile below to fire. Native gestures + Training recordings need FSM 501 (or higher), Sonic OFF. GEAR-SONIC dance clips live in the <b>Dance clip playback</b> tab.
       </div>
     </div>
 
@@ -386,27 +309,11 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
       </div>
     </details>
 
-    <details class="collapsible">
-      <summary>Voice &amp; Arnold soundboard</summary>
+    <details class="collapsible" open>
+      <summary>Sound clips · <span style="text-transform:none;color:var(--text2);font-weight:500">original Arnold audio through G1 speakers</span></summary>
       <div class="details-body">
-        <div style="display:flex;gap:8px;margin-bottom:12px">
-          <input type="text" id="speak-input" placeholder="Type something for G1 to say..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiSpeak(this.value)">
-          <button onclick="apiSpeak(document.getElementById('speak-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--purple);color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">Speak</button>
-        </div>
-        <div id="speak-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:18px;margin-bottom:14px"></div>
-        <div class="trigger-grid">
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('illbeback')"><span class="kw">I'll be back</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('hastalavista')"><span class="kw">Hasta la vista</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('terminated')"><span class="kw">Terminated</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('getdown')"><span class="kw">Get down!</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('comewitme')"><span class="kw">Come with me</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('gettothecopter')"><span class="kw">Get to the chopper!</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('its_not_a_tumor')"><span class="kw">Not a tumor!</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('consider_that_a_divorce')"><span class="kw">Consider that a divorce</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('chill_out')"><span class="kw">Chill out</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('talk_to_the_hand')"><span class="kw">Talk to the hand</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('whoisyourdaddy')"><span class="kw">Who is your daddy</span></div>
-          <div class="trigger-item" style="cursor:pointer" onclick="apiArnold('nowyouknow')"><span class="kw">Why I cry</span></div>
+        <div class="trigger-grid" id="clip-grid-sound">
+          <div style="color:var(--text3);font-size:12px;font-family:var(--mono);padding:8px">Loading clips…</div>
         </div>
       </div>
     </details>
@@ -482,53 +389,119 @@ L2/R2 = Height (squat set only)</div>
   <!-- ===================== DANCE MODE ===================== -->
   <div class="mode-panel" id="panel-dance">
 
+    <!-- Workflow stepper -->
+    <div class="stepper" id="stepper">
+      <div class="step" data-step="wake"><span class="n">1</span><div class="txt"><b>Wake</b><span class="hint">Damp → StandUp → Walk (FSM 501)</span></div></div>
+      <div class="step" data-step="sonic"><span class="n">2</span><div class="txt"><b>Start Sonic</b><span class="hint">Launch gamepad_manager (~15 s)</span></div></div>
+      <div class="step" data-step="r3"><span class="n">3</span><div class="txt"><b>R3 Start</b><span class="hint">Activate policy on the remote</span></div></div>
+      <div class="step" data-step="play"><span class="n">4</span><div class="txt"><b>F1 → Clip</b><span class="hint">F1 enters ZMQ; click clip; D-pad returns to walk</span></div></div>
+    </div>
+
     <div class="section">
       <div class="section-label">System</div>
       <div class="chip-row">
-        <div class="chip"><span class="k">Start</span> Stand up</div>
-        <div class="chip danger"><span class="k">Select</span> Emergency stop</div>
-        <div class="chip"><span class="k">F1</span> Toggle planner on/off</div>
+        <div class="chip" style="cursor:pointer" onclick="apiWake()"><span class="k" style="background:var(--green-bg);color:var(--green);border-color:var(--green-border)">Wake</span> Stand up → Walk (FSM 501)</div>
+        <div class="chip" id="sonic-chip" style="cursor:pointer" onclick="apiSonicToggle()"><span class="k" id="sonic-k" style="background:var(--blue-bg);color:var(--blue);border-color:var(--blue-border)">Sonic</span> <span id="sonic-label">Start GEAR-SONIC (R3 + ZMQ)</span></div>
       </div>
     </div>
 
     <div class="section">
-      <div class="section-label">Playback controls (planner off)</div>
-      <div class="stick-grid">
-        <div class="stick-card"><div class="label">A</div><div class="val">Play / pause clip</div></div>
-        <div class="stick-card"><div class="label">B</div><div class="val">Restart from frame 0</div></div>
-        <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Prev / next clip</div></div>
-        <div class="stick-card"><div class="label">X / Y</div><div class="val">Recalibrate heading</div></div>
+      <div class="section-label">Trained GEAR-SONIC clips <span class="id-badge">TRAINED</span> · Sonic running + R3 Start + F1 first</div>
+      <div class="trigger-grid" id="clip-grid">
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('party dance')"><span class="kw">Party</span><span class="id-badge">TRAINED</span><span class="dur">16.6s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('macarena')"><span class="kw">Macarena</span><span class="id-badge">TRAINED</span><span class="dur">45.8s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('spin')"><span class="kw">360 spin</span><span class="id-badge">TRAINED</span><span class="dur">15.2s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('kick')"><span class="kw">Standing kick</span><span class="id-badge">TRAINED</span><span class="dur">5.5s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('lunge')"><span class="kw">Forward lunge</span><span class="id-badge">TRAINED</span><span class="dur">13.3s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('squat')"><span class="kw">Deep squat</span><span class="id-badge">TRAINED</span><span class="dur">14.1s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('tired')"><span class="kw">Tired lunge</span><span class="id-badge">TRAINED</span><span class="dur">27.0s</span></div>
+        <div class="trigger-item" style="cursor:pointer" onclick="apiTrigger('jump')"><span class="kw">One-leg jump</span><span class="id-badge">TRAINED</span><span class="dur">16.7s</span></div>
       </div>
     </div>
 
     <div class="section">
-      <div class="section-label">Direct motion select (press again = mirrored)</div>
-      <div class="dance-direct">
-        <div class="dd-item"><span class="k">D-Up</span> Macarena</div>
-        <div class="dd-item"><span class="k">D-Dn</span> Squat</div>
-        <div class="dd-item"><span class="k">D-Lt</span> Party dance</div>
-        <div class="dd-item"><span class="k">D-Rt</span> Walk spin 360</div>
-        <div class="dd-item"><span class="k">L2</span> Neutral kick</div>
-        <div class="dd-item"><span class="k">R2</span> One-leg jump</div>
+      <div class="section-label">Quick trigger — type a keyword</div>
+      <div style="display:flex;gap:8px;margin-bottom:8px">
+        <input type="text" id="trigger-input" placeholder="party, macarena, kick, squat, lunge, spin, jump, tired..." style="flex:1;font-family:var(--sans);font-size:14px;padding:10px 14px;border-radius:var(--radius-sm);border:1px solid var(--bg4);background:var(--bg2);color:var(--text)" onkeydown="if(event.key==='Enter')apiTrigger(this.value)">
+        <button onclick="apiTrigger(document.getElementById('trigger-input').value)" style="padding:10px 20px;border-radius:var(--radius-sm);border:none;background:var(--accent);color:var(--bg);font-size:14px;font-weight:700;cursor:pointer;font-family:var(--sans)">GO</button>
       </div>
+      <div id="trigger-result" style="font-family:var(--mono);font-size:12px;color:var(--text3);min-height:20px"></div>
     </div>
 
     <div class="section">
-      <div class="section-label">All 13 motion clips</div>
-      <div class="clip-list" id="clip-list"></div>
-    </div>
-
-    <div class="section">
-      <div class="section-label">Planner sub-mode (F1 toggles on)</div>
-      <div class="stick-grid">
-        <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Cycle mode (0–6)</div></div>
-        <div class="stick-card"><div class="label">L2 / R2</div><div class="val">Speed / height</div></div>
-        <div class="stick-card"><div class="label">A</div><div class="val">Play / pause</div></div>
-        <div class="stick-card"><div class="label">B</div><div class="val">Emergency stop</div></div>
-        <div class="stick-card"><div class="label">Left stick</div><div class="val">Move direction</div></div>
-        <div class="stick-card"><div class="label">Right stick</div><div class="val">Facing direction</div></div>
+      <div class="section-label">Walk / Run — virtual joystick (FSM 501 only)</div>
+      <div class="joystick-area">
+        <div>
+          <div class="joystick-container" id="joy-move">
+            <div class="joystick-bg"></div>
+            <div class="joystick-thumb" id="joy-move-thumb"></div>
+          </div>
+          <div class="joystick-label">Move (L-stick)</div>
+        </div>
+        <div>
+          <div class="joystick-container" id="joy-turn">
+            <div class="joystick-bg"></div>
+            <div class="joystick-thumb" id="joy-turn-thumb"></div>
+          </div>
+          <div class="joystick-label">Turn (R-stick)</div>
+        </div>
+        <div style="flex:1;min-width:180px">
+          <div class="joystick-readout" id="joy-readout">
+            vx: <span class="val" id="joy-vx">0.00</span> m/s<br>
+            vy: <span class="val" id="joy-vy">0.00</span> m/s<br>
+            ωz: <span class="val" id="joy-wz">0.00</span> rad/s<br>
+            <span id="joy-mode" style="color:var(--text3)">Idle</span>
+          </div>
+          <div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+            <button onclick="setMoveSpeed(0.8)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Walk</span> 0.8</button>
+            <button onclick="setMoveSpeed(2.0)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Run</span> 2.0</button>
+            <button onclick="setMoveSpeed(0.3)" class="chip" style="cursor:pointer;font-size:11px"><span class="k">Slow</span> 0.3</button>
+            <button onclick="joyStop()" class="chip danger" style="cursor:pointer;font-size:11px"><span class="k">Stop</span></button>
+          </div>
+        </div>
       </div>
     </div>
+
+    <details class="collapsible">
+      <summary>R3 gamepad reference · <span style="text-transform:none;color:var(--text2);font-weight:500">button map for GEAR-SONIC gamepad_manager</span></summary>
+      <div class="details-body">
+        <div class="section">
+          <div class="section-label">Playback controls (planner off)</div>
+          <div class="stick-grid">
+            <div class="stick-card"><div class="label">A</div><div class="val">Play / pause clip</div></div>
+            <div class="stick-card"><div class="label">B</div><div class="val">Restart from frame 0</div></div>
+            <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Prev / next clip</div></div>
+            <div class="stick-card"><div class="label">X / Y</div><div class="val">Recalibrate heading</div></div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-label">Direct motion select (press again = mirrored)</div>
+          <div class="dance-direct">
+            <div class="dd-item"><span class="k">D-Up</span> Macarena</div>
+            <div class="dd-item"><span class="k">D-Dn</span> Squat</div>
+            <div class="dd-item"><span class="k">D-Lt</span> Party dance</div>
+            <div class="dd-item"><span class="k">D-Rt</span> Walk spin 360</div>
+            <div class="dd-item"><span class="k">L2</span> Neutral kick</div>
+            <div class="dd-item"><span class="k">R2</span> One-leg jump</div>
+          </div>
+        </div>
+        <div class="section">
+          <div class="section-label">All 13 motion clips</div>
+          <div class="clip-list" id="clip-list"></div>
+        </div>
+        <div class="section">
+          <div class="section-label">Planner sub-mode (F1 toggles on)</div>
+          <div class="stick-grid">
+            <div class="stick-card"><div class="label">L1 / R1</div><div class="val">Cycle mode (0–6)</div></div>
+            <div class="stick-card"><div class="label">L2 / R2</div><div class="val">Speed / height</div></div>
+            <div class="stick-card"><div class="label">A</div><div class="val">Play / pause</div></div>
+            <div class="stick-card"><div class="label">B</div><div class="val">Emergency stop</div></div>
+            <div class="stick-card"><div class="label">Left stick</div><div class="val">Move direction</div></div>
+            <div class="stick-card"><div class="label">Right stick</div><div class="val">Facing direction</div></div>
+          </div>
+        </div>
+      </div>
+    </details>
 
     <hr class="divider">
 
@@ -1254,6 +1227,45 @@ async function loadActions() {
   } catch (e) { /* server may be down */ }
 }
 window.addEventListener('load', () => setTimeout(loadActions, 1200));
+
+// === Original sound clips (MP3/WAV on G1, not TTS) ===
+const CLIP_LABELS = {
+  'ill-be-back.mp3':      "I'll be back",
+  'hasta-la-vista.mp3':   "Hasta la vista",
+  'come-with-me.mp3':     "Come with me",
+  'i-am-terminator.wav':  "I am Terminator",
+  'no-problemo.wav':      "No problemo",
+  'trust-me.wav':         "Trust me",
+  'affirmative.wav':      "Affirmative",
+};
+
+async function apiClip(name) {
+  apiLog('Clip: <span style="color:var(--accent)">' + name + '</span>');
+  try {
+    const r = await fetch(API_BASE + '/api/clip/' + encodeURIComponent(name), {
+      method: 'POST', signal: AbortSignal.timeout(30000),
+    });
+    const d = await r.json();
+    if (r.ok && d.status === 'played') apiLog('<span style="color:var(--green)">✓</span> ' + name);
+    else apiLog('<span style="color:var(--amber)">clip failed</span>: ' + (d.error || d.output || ''));
+  } catch (e) { apiLog('<span style="color:var(--red)">Clip error</span>: ' + e.message); }
+}
+
+async function loadClips() {
+  try {
+    const r = await fetch(API_BASE + '/api/clips', { signal: AbortSignal.timeout(5000) });
+    const d = await r.json();
+    const grid = document.getElementById('clip-grid-sound');
+    if (!grid) return;
+    const clips = d.clips || [];
+    grid.innerHTML = clips.map(name => {
+      const label = CLIP_LABELS[name] || name.replace(/\.(mp3|wav|ogg|flac|m4a)$/i, '').replace(/[-_]/g, ' ');
+      const esc = name.replace(/'/g, "\\'");
+      return '<div class="trigger-item" style="cursor:pointer" onclick="apiClip(\'' + esc + '\')"><span class="kw">' + label + '</span></div>';
+    }).join('') || '<div style="color:var(--text3);padding:8px">No clips found.</div>';
+  } catch (e) { /* server may be down */ }
+}
+window.addEventListener('load', () => setTimeout(loadClips, 1400));
 </script>
 </body>
 </html>
