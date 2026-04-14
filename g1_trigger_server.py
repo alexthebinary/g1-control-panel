@@ -339,7 +339,7 @@ def play_clip(name: str):
         return JSONResponse(status_code=404, content={"error": f"not found: {name}"})
     try:
         result = subprocess.run(
-            ["python3", "/home/unitree/g1_tools/g1_play_clip.py", str(path)],
+            ["python3", "/home/unitree/g1_tools/g1_play_clip.py", str(path), "--gain", "2.5"],
             capture_output=True, text=True, timeout=30,
         )
         return {
