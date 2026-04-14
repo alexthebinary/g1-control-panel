@@ -340,10 +340,31 @@ details.collapsible > .details-body { padding: 0 14px 14px; }
     </div>
 
     <div class="section">
-      <div class="section-label">Motion clips <span class="id-badge">TRAINED</span> track well · <span class="ood-badge">OOD</span> experimental, may flop</div>
+      <div style="background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:10px;font-size:12px;line-height:1.55">
+        <div style="font-weight:600;color:var(--text);margin-bottom:6px">Dance library on this G1 · what's ready to test today</div>
+        <div style="color:var(--text2)">
+          <span style="color:var(--green);font-weight:600">✓</span>
+          <b>3 Unitree Training Mode recordings</b> —
+          <span style="font-family:var(--mono);font-size:11px">Waist_Drum_Dance, Spin_discs, Throw_money</span>
+          — via native <code>G1ArmActionClient</code> (see Unitree rows below, Sonic OFF)
+        </div>
+        <div style="color:var(--text2);margin-top:3px">
+          <span style="color:var(--green);font-weight:600">✓</span>
+          <b>8 NVIDIA GEAR-SONIC clips</b> marked <span class="id-badge">TRAINED</span> — play reliably via ZMQ (Sonic ON, F1 first)
+        </div>
+        <div style="color:var(--text3);margin-top:3px">
+          <span style="color:var(--amber);font-weight:600">!</span>
+          <b>16 community-retargeted clips</b> marked <span class="ood-badge">OOD</span> — missing <code>body_quat.csv</code>, policy may refuse or flop. Hidden by default.
+        </div>
+        <div style="color:var(--text3);margin-top:6px;font-size:11px">
+          <b>Not installed:</b> Unitree Dancing SDK ($33,400, 2mo lead · 8 dances: Tai Chi, Love You, Robot Dance, Victory, APT, Qinghai Shake, Bunny, Ace of Spades).
+          Expansion path: retarget LAFAN1 / MOSAIC / BONES-SEED from HuggingFace.
+        </div>
+      </div>
+      <div class="section-label">Motion clips <span class="id-badge">TRAINED</span> track well · <span class="ood-badge">OOD</span> experimental, hidden unless toggled</div>
       <div class="cat-pills" id="cat-pills">
-        <button class="cat-pill active" data-cat="all">All</button>
-        <button class="cat-pill" data-cat="trained">Trained only</button>
+        <button class="cat-pill" data-cat="all">All (incl. OOD)</button>
+        <button class="cat-pill active" data-cat="trained">Trained only</button>
         <button class="cat-pill" data-cat="dance">Dance</button>
         <button class="cat-pill" data-cat="expression">Expression</button>
         <button class="cat-pill" data-cat="martial">Martial</button>
